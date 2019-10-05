@@ -1,0 +1,8 @@
+body {
+    background-color: #334552;
+}
+
+#screenCanvas {
+    display: block;
+    margin: 0 auto;
+}
