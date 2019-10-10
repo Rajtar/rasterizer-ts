@@ -1,4 +1,5 @@
 export class RasterizerScreen {
+
     private readonly _canvasCtx: CanvasRenderingContext2D;
     private readonly _width: number;
     private readonly _height: number;
@@ -9,7 +10,7 @@ export class RasterizerScreen {
         this._height = canvas.height;
     }
 
-    setPixelColor(x: number, y: number, r: number, g: number, b: number) {
+    setPixelColor(x: number, y: number, r: number, g: number, b: number): void {
         this._canvasCtx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + (255) + ")";
         this._canvasCtx.fillRect(x, y, 1, 1);
     }
