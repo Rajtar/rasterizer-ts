@@ -19,6 +19,14 @@ export class RasterizerScreen {
         this._canvasCtx.fillRect(0, 0, this._width, this._height);
     }
 
+    setPixelsFromBuffer(colorBuffer: Uint8ClampedArray) {
+        const imageData : ImageData = new ImageData(colorBuffer, this.width, this.height);
+        this._canvasCtx.putImageData(imageData,0,0);
+    }
+
+    setFpsDisplay(fps: number) {
+        this._canvasCtx.fillText("FPS: " + fps, 10, 20);
+    }
 
     get width(): number {
         return this._width;

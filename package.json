@@ -3,14 +3,19 @@
   "version": "1.0.0",
   "description": "",
   "private": true,
+  "watch": {
+    "build": "./src/scripts/*.ts"
+  },
   "scripts": {
     "build": "webpack",
+    "watch": "npm-watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "npm-watch": "^0.6.0",
     "ts-loader": "^6.2.0",
     "typescript": "^3.6.3",
     "webpack": "^4.41.0",
