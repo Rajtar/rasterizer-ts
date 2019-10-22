@@ -1,4 +1,4 @@
-export class RasterizerScreen {
+export class ScreenHandler {
 
     private readonly _canvasCtx: CanvasRenderingContext2D;
     private readonly _width: number;

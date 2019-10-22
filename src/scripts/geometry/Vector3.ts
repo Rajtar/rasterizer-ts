@@ -1,24 +1,24 @@
 export class Vector3 {
 
-    private readonly x: number;
-    private readonly y: number;
-    private readonly z: number;
+    private readonly _x: number;
+    private readonly _y: number;
+    private readonly _z: number;
 
     constructor(x = 0, y = 0, z = 0) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this._x = x;
+        this._y = y;
+        this._z = z;
     }
 
     static betweenPoints(p1: Vector3, p2: Vector3): Vector3 {
-        const x = p1.x - p2.x;
-        const y = p1.y - p2.y;
-        const z = p1.z - p2.z;
+        const x = p1._x - p2._x;
+        const y = p1._y - p2._y;
+        const z = p1._z - p2._z;
         return new Vector3(x, y, z);
     }
 
     getMagnitude(): number {
-        return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+        return Math.sqrt(this._x * this._x + this._y * this._y + this._z * this._z);
     }
 
     getNormalized(): Vector3 {
@@ -26,30 +26,30 @@ export class Vector3 {
     }
 
     dot(other: Vector3): number {
-        return this.x * other.x + this.y * other.y + this.z * other.z;
+        return this._x * other._x + this._y * other._y + this._z * other._z;
     }
 
     cross(other: Vector3): Vector3 {
-        return new Vector3((this.y * other.z) - (this.z * other.y),
-                           (this.z * other.x) - (this.x * other.z),
-                           (this.x * other.y) - (this.y * other.x));
+        return new Vector3((this._y * other._z) - (this._z * other._y),
+                           (this._z * other._x) - (this._x * other._z),
+                           (this._x * other._y) - (this._y * other._x));
     }
 
     add(other: Vector3): Vector3 {
-        return new Vector3(this.x + other.x, this.y + other.y, this.z + other.y)
+        return new Vector3(this._x + other._x, this._y + other._y, this._z + other._y)
     }
 
     substract(other: Vector3): Vector3 {
-        return new Vector3(this.x - other.x, this.y - other.y, this.z - other.y)
+        return new Vector3(this._x - other._x, this._y - other._y, this._z - other._y)
     }
 
     multiply(other: Vector3): Vector3
     multiply(other: number): Vector3
     multiply(other: any): Vector3 {
         if (other instanceof Vector3) {
-            return new Vector3(this.x * other.x, this.y * other.y, this.z * other.y)
+            return new Vector3(this._x * other._x, this._y * other._y, this._z * other._y)
         } else {
-            return new Vector3(this.x * other, this.y * other, this.z * other)
+            return new Vector3(this._x * other, this._y * other, this._z * other)
         }
     }
 
@@ -57,9 +57,21 @@ export class Vector3 {
     divide(other: number): Vector3
     divide(other: any): Vector3 {
         if (other instanceof Vector3) {
-            return new Vector3(this.x / other.x, this.y / other.y, this.z / other.y)
+            return new Vector3(this._x / other._x, this._y / other._y, this._z / other._y)
         } else {
-            return new Vector3(this.x / other, this.y / other, this.z / other)
+            return new Vector3(this._x / other, this._y / other, this._z / other)
         }
+    }
+
+    get x(): number {
+        return this._x;
+    }
+
+    get y(): number {
+        return this._y;
+    }
+
+    get z(): number {
+        return this._z;
     }
 }
