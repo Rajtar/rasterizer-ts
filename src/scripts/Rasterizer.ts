@@ -38,7 +38,7 @@ export class Rasterizer {
             if (this.isInTriangle(screenX, screenY, this.triangle)) {
                 screenBuffer.setColor(i, 255, 0, 0);
             } else {
-                screenBuffer.setColor(i, 255, 255, 255);
+                screenBuffer.setColor(i, 0, 0, 0);
             }
         }
 
@@ -51,13 +51,13 @@ export class Rasterizer {
         const x2 = (triangle.b.x + 1) * this.targetScreen.width * 0.5;
         const x3 = (triangle.c.x + 1) * this.targetScreen.width * 0.5;
 
-        const y1 = (triangle.a.y + 1) * this.targetScreen.height * 0.5;
-        const y2 = (triangle.b.y + 1) * this.targetScreen.height * 0.5;
-        const y3 = (triangle.c.y + 1) * this.targetScreen.height * 0.5;
+        const y1 = Math.abs((triangle.a.y + 1) * this.targetScreen.height * 0.5 - this.targetScreen.height);
+        const y2 = Math.abs((triangle.b.y + 1) * this.targetScreen.height * 0.5 - this.targetScreen.height);
+        const y3 = Math.abs((triangle.c.y + 1) * this.targetScreen.height * 0.5 - this.targetScreen.height);
 
-        return (x1 - x2) * (y - y1) - (y1 - y2) * (x - x1) < 0 &&
-            (x2 - x3) * (y - y2) - (y2 - y3) * (x - x2) < 0 &&
-            (x3 - x1) * (y - y3) - (y3 - y1) * (x - x3) < 0;
+        return (x1 - x2) * (y - y1) - (y1 - y2) * (x - x1) > 0 &&
+            (x2 - x3) * (y - y2) - (y2 - y3) * (x - x2) > 0 &&
+            (x3 - x1) * (y - y3) - (y3 - y1) * (x - x3) > 0;
     }
 
 }

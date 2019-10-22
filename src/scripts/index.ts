@@ -10,7 +10,7 @@ function initialize(): void {
 
     const a: Vector3 = new Vector3(0.75, 0);
     const b: Vector3 = new Vector3(0.75, 0.5);
-    const c: Vector3 = new Vector3(-0.5, 0);
+    const c: Vector3 = new Vector3(-0.5, 0.6);
     const triangle: Triangle = new Triangle(a, b, c);
 
     const rasterizer: Rasterizer = new Rasterizer(targetScreen, triangle);
