@@ -26,6 +26,7 @@ export class ScreenHandler {
     }
 
     setFpsDisplay(fps: number): void {
+        this._canvasCtx.fillStyle = "#08a300";
         this._canvasCtx.fillText("FPS: " + fps, 10, 20);
     }
 
