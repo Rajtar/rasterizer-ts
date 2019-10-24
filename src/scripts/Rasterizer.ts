@@ -2,6 +2,7 @@ import {ScreenHandler} from "./screen/ScreenHandler";
 import {Triangle} from "./geometry/Triangle";
 import {ScreenBuffer} from "./screen/ScreenBuffer";
 import {Color} from "./screen/Color";
+import {Vector3} from "./geometry/Vector3";
 
 export class Rasterizer {
 
@@ -31,7 +32,7 @@ export class Rasterizer {
 
     private render(): void {
         const screenBuffer = new ScreenBuffer(this.targetScreen.width, this.targetScreen.height);
-        let depthBuffer: number[];
+        const depthBuffer: number[] = new Array(this.targetScreen.width * this.targetScreen.height).fill(Number.MAX_SAFE_INTEGER);
 
         for (let i = 0; i < screenBuffer.getLength(); i += 4) {
             screenBuffer.setColor(i, new Color(0, 0, 0, 50));
@@ -41,7 +42,11 @@ export class Rasterizer {
 
             for (const triangle of this.triangles) {
                 if (this.isInTriangle(screenX, screenY, triangle)) {
-                    screenBuffer.setColor(i, new Color(255, 0, 0));
+                    const lambdaCords: Vector3 = triangle.toBarycentricCoordinates(screenX, screenY);
+                    const redInterpolated = lambdaCords.x * triangle.aColor.r + lambdaCords.y * triangle.bColor.r + lambdaCords.z * triangle.cColor.r;
+                    const greenInterpolated = lambdaCords.x * triangle.aColor.g + lambdaCords.y * triangle.bColor.g + lambdaCords.z * triangle.cColor.g;
+                    const blueInterpolated = lambdaCords.x * triangle.aColor.b + lambdaCords.y * triangle.bColor.b + lambdaCords.z * triangle.cColor.b;
+                    screenBuffer.setColor(i, new Color(redInterpolated, greenInterpolated, blueInterpolated));
                 }
             }
         }
@@ -51,14 +56,12 @@ export class Rasterizer {
     }
 
     private isInTriangle(x: number, y: number, triangle: Triangle): boolean {
-        const x1 = (triangle.a.x + 1) * this.targetScreen.width * 0.5;
-        const x2 = (triangle.b.x + 1) * this.targetScreen.width * 0.5;
-        const x3 = (triangle.c.x + 1) * this.targetScreen.width * 0.5;
-
-        const y1 = Math.abs((triangle.a.y + 1) * this.targetScreen.height * 0.5 - this.targetScreen.height);
-        const y2 = Math.abs((triangle.b.y + 1) * this.targetScreen.height * 0.5 - this.targetScreen.height);
-        const y3 = Math.abs((triangle.c.y + 1) * this.targetScreen.height * 0.5 - this.targetScreen.height);
-
+        const x1 = triangle.screenA.x;
+        const x2 = triangle.screenB.x;
+        const x3 = triangle.screenC.x;
+        const y1 = triangle.screenA.y;
+        const y2 = triangle.screenB.y;
+        const y3 = triangle.screenC.y;
         return (x1 - x2) * (y - y1) - (y1 - y2) * (x - x1) > 0 &&
             (x2 - x3) * (y - y2) - (y2 - y3) * (x - x2) > 0 &&
             (x3 - x1) * (y - y3) - (y3 - y1) * (x - x3) > 0;
