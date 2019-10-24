@@ -11,6 +11,18 @@ export class Triangle {
         this._c = c;
     }
 
+    toBarycentricCoordinates(x: number, y: number): Vector3 {
+        const lambdaA = ((this.b.y - this.c.y) * (x - this.c.x) + (this.c.x - this.b.x) * (y - this.c.y)) /
+                        ((this.b.y - this.c.y) * (this.a.x - this.c.x) + (this.c.x - this.b.x) * (this.a.y - this.c.y));
+
+        const lambdaB = ((this.c.y - this.a.y) * (x - this.c.x) + (this.a.x - this.c.x) * (y - this.c.y)) /
+                        ((this.c.y - this.a.y) * (this.b.x - this.c.x) + (this.a.x - this.c.x) * (this.b.y - this.c.y));
+
+        const lambdaC = 1 - lambdaA - lambdaB;
+        
+        return new Vector3(lambdaA, lambdaB, lambdaC);
+    }
+
     get a(): Vector3 {
         return this._a;
     }

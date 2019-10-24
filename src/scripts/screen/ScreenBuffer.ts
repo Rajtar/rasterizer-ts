@@ -1,3 +1,5 @@
+import {Color} from "./Color";
+
 export class ScreenBuffer {
 
     private readonly _buffer: Uint8ClampedArray;
@@ -10,11 +12,11 @@ export class ScreenBuffer {
         return this._buffer.length;
     }
 
-    setColor(index: number, r: number, g: number, b: number, a = 255): void {
-        this._buffer[index] = r;
-        this._buffer[index + 1] = g;
-        this._buffer[index + 2] = b;
-        this._buffer[index + 3] = a;
+    setColor(index: number, color: Color): void {
+        this._buffer[index] = color.r;
+        this._buffer[index + 1] = color.g;
+        this._buffer[index + 2] = color.b;
+        this._buffer[index + 3] = color.a;
     }
 
     get buffer(): Uint8ClampedArray {

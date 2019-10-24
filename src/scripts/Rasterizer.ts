@@ -1,6 +1,7 @@
 import {ScreenHandler} from "./screen/ScreenHandler";
 import {Triangle} from "./geometry/Triangle";
 import {ScreenBuffer} from "./screen/ScreenBuffer";
+import {Color} from "./screen/Color";
 
 export class Rasterizer {
 
@@ -30,16 +31,17 @@ export class Rasterizer {
 
     private render(): void {
         const screenBuffer = new ScreenBuffer(this.targetScreen.width, this.targetScreen.height);
+        let depthBuffer: number[];
 
         for (let i = 0; i < screenBuffer.getLength(); i += 4) {
-            screenBuffer.setColor(i, 0, 0, 0, 50);
+            screenBuffer.setColor(i, new Color(0, 0, 0, 50));
 
             const screenX = (i / 4) % this.targetScreen.width;
             const screenY = Math.floor((i / 4) / this.targetScreen.width);
 
             for (const triangle of this.triangles) {
                 if (this.isInTriangle(screenX, screenY, triangle)) {
-                    screenBuffer.setColor(i, 255, 0, 0);
+                    screenBuffer.setColor(i, new Color(255, 0, 0));
                 }
             }
         }
