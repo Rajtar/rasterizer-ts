@@ -43,10 +43,14 @@ export class Rasterizer {
             for (const triangle of this.triangles) {
                 if (this.isInTriangle(screenX, screenY, triangle)) {
                     const lambdaCords: Vector3 = triangle.toBarycentricCoordinates(screenX, screenY);
-                    const redInterpolated = lambdaCords.x * triangle.aColor.r + lambdaCords.y * triangle.bColor.r + lambdaCords.z * triangle.cColor.r;
-                    const greenInterpolated = lambdaCords.x * triangle.aColor.g + lambdaCords.y * triangle.bColor.g + lambdaCords.z * triangle.cColor.g;
-                    const blueInterpolated = lambdaCords.x * triangle.aColor.b + lambdaCords.y * triangle.bColor.b + lambdaCords.z * triangle.cColor.b;
-                    screenBuffer.setColor(i, new Color(redInterpolated, greenInterpolated, blueInterpolated));
+                    const depth: number = lambdaCords.x * triangle.a.z + lambdaCords.y * triangle.b.z + lambdaCords.z * triangle.c.z;
+                    if (depth < depthBuffer[i / 4]) {
+                        depthBuffer[i / 4] = depth;
+                        const redInterpolated = lambdaCords.x * triangle.aColor.r + lambdaCords.y * triangle.bColor.r + lambdaCords.z * triangle.cColor.r;
+                        const greenInterpolated = lambdaCords.x * triangle.aColor.g + lambdaCords.y * triangle.bColor.g + lambdaCords.z * triangle.cColor.g;
+                        const blueInterpolated = lambdaCords.x * triangle.aColor.b + lambdaCords.y * triangle.bColor.b + lambdaCords.z * triangle.cColor.b;
+                        screenBuffer.setColor(i, new Color(redInterpolated, greenInterpolated, blueInterpolated));
+                    }
                 }
             }
         }
