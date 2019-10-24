@@ -5,13 +5,13 @@ import {ScreenBuffer} from "./screen/ScreenBuffer";
 export class Rasterizer {
 
     private readonly targetScreen: ScreenHandler;
-    private readonly triangle: Triangle;
+    private readonly triangles: Triangle[];
     private lastCalledTime: DOMHighResTimeStamp;
 
 
-    constructor(targetScreen: ScreenHandler, triangle: Triangle) {
+    constructor(targetScreen: ScreenHandler, triangle: Triangle[]) {
         this.targetScreen = targetScreen;
-        this.triangle = triangle;
+        this.triangles = triangle;
     }
 
     public launchRenderLoop(): void {
@@ -32,13 +32,15 @@ export class Rasterizer {
         const screenBuffer = new ScreenBuffer(this.targetScreen.width, this.targetScreen.height);
 
         for (let i = 0; i < screenBuffer.getLength(); i += 4) {
+            screenBuffer.setColor(i, 0, 0, 0, 50);
+
             const screenX = (i / 4) % this.targetScreen.width;
             const screenY = Math.floor((i / 4) / this.targetScreen.width);
 
-            if (this.isInTriangle(screenX, screenY, this.triangle)) {
-                screenBuffer.setColor(i, 255, 0, 0);
-            } else {
-                screenBuffer.setColor(i, 0, 0, 0);
+            for (const triangle of this.triangles) {
+                if (this.isInTriangle(screenX, screenY, triangle)) {
+                    screenBuffer.setColor(i, 255, 0, 0);
+                }
             }
         }
 

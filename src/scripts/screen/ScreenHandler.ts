@@ -10,16 +10,6 @@ export class ScreenHandler {
         this._height = canvas.height;
     }
 
-    setPixelColor(x: number, y: number, r: number, g: number, b: number): void {
-        this._canvasCtx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + (255) + ")";
-        this._canvasCtx.fillRect(x, y, 1, 1);
-    }
-
-    setAllPixelsColor(r: number, g: number, b: number): void {
-        this._canvasCtx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + (255) + ")";
-        this._canvasCtx.fillRect(0, 0, this._width, this._height);
-    }
-
     setPixelsFromBuffer(colorBuffer: Uint8ClampedArray): void {
         const imageData: ImageData = new ImageData(colorBuffer, this.width, this.height);
         this._canvasCtx.putImageData(imageData,0,0);
