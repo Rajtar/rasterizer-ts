@@ -35,7 +35,7 @@ export class Triangle {
         this._screenC = new Vector3(x3, y3);
     }
 
-    toBarycentricCoordinates(x: number, y: number): Vector3 {
+    toLambdaCoordinates(x: number, y: number): Vector3 {
         const x1 = this.screenA.x;
         const x2 = this.screenB.x;
         const x3 = this.screenC.x;
@@ -52,6 +52,18 @@ export class Triangle {
         const lambdaC = 1 - lambdaA - lambdaB;
 
         return new Vector3(lambdaA, lambdaB, lambdaC);
+    }
+
+    isInTriangle(x: number, y: number): boolean {
+        const x1 = this.screenA.x;
+        const x2 = this.screenB.x;
+        const x3 = this.screenC.x;
+        const y1 = this.screenA.y;
+        const y2 = this.screenB.y;
+        const y3 = this.screenC.y;
+        return (x1 - x2) * (y - y1) - (y1 - y2) * (x - x1) > 0 &&
+            (x2 - x3) * (y - y2) - (y2 - y3) * (x - x2) > 0 &&
+            (x3 - x1) * (y - y3) - (y3 - y1) * (x - x3) > 0;
     }
 
     get a(): Vector3 {
