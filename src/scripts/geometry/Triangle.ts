@@ -27,6 +27,10 @@ export class Triangle {
     private readonly minY: number;
     private readonly maxY: number;
 
+    private readonly isATopLeft: boolean;
+    private readonly isBTopLeft: boolean;
+    private readonly isCTopLeft: boolean;
+
     constructor(a: Vector3, b: Vector3, c: Vector3, aColor: Color, bColor: Color, cColor: Color) {
         this._a = a;
         this._b = b;
@@ -58,6 +62,10 @@ export class Triangle {
         this.dyAB = this.screenA.y - this.screenB.y;
         this.dyBC = this.screenB.y - this.screenC.y;
         this.dyCA = this.screenC.y - this.screenA.y;
+
+        this.isATopLeft = this.dyAB < 0 || (this.dyAB === 0 && this.dxAB > 0);
+        this.isBTopLeft = this.dyBC < 0 || (this.dyBC === 0 && this.dxBC > 0);
+        this.isCTopLeft = this.dyCA < 0 || (this.dyCA === 0 && this.dxCA > 0);
     }
 
     toLambdaCoordinates(x: number, y: number): Vector3 {
@@ -72,9 +80,19 @@ export class Triangle {
     }
 
     isInTriangle(x: number, y: number): boolean {
-        return this.dxAB * (y - this.screenA.y) - this.dyAB * (x - this.screenA.x) > 0 &&
-            this.dxBC * (y - this.screenB.y) - this.dyBC * (x - this.screenB.x) > 0 &&
+        const isABOk = (this.isATopLeft && this.isBTopLeft) ?
+            this.dxAB * (y - this.screenA.y) - this.dyAB * (x - this.screenA.x) >= 0 :
+            this.dxAB * (y - this.screenA.y) - this.dyAB * (x - this.screenA.x) > 0;
+
+        const isBCOk = (this.isBTopLeft && this.isCTopLeft) ?
+            this.dxBC * (y - this.screenB.y) - this.dyBC * (x - this.screenB.x) >= 0 :
+            this.dxBC * (y - this.screenB.y) - this.dyBC * (x - this.screenB.x) > 0;
+
+        const isCAOk = (this.isCTopLeft && this.isATopLeft) ?
+            this.dxCA * (y - this.screenC.y) - this.dyCA * (x - this.screenC.x) >= 0 :
             this.dxCA * (y - this.screenC.y) - this.dyCA * (x - this.screenC.x) > 0;
+
+        return isABOk && isBCOk && isCAOk;
     }
 
     isInBoundingBox(x: number, y: number): boolean {

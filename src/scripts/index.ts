@@ -25,7 +25,12 @@ function initialize(): void {
     const c2: Vector3 = new Vector3(-0.25, 0, 0.85);
     const triangle2: Triangle = new Triangle(a2, b2, c2, blue, green, red);
 
-    const rasterizer: Rasterizer = new Rasterizer(targetScreen, [triangle1, triangle2]);
+    const a3: Vector3 = new Vector3(-0.25, 0, 0.85);
+    const b3: Vector3 = new Vector3(0.5, -0.5, 0.3);
+    const c3: Vector3 = new Vector3(0.5, 0, 0.85);
+    const triangle3: Triangle = new Triangle(a3, b3, c3, blue, green, red);
+
+    const rasterizer: Rasterizer = new Rasterizer(targetScreen, [triangle1, triangle2, triangle3]);
     rasterizer.launchRenderLoop();
 }
 
