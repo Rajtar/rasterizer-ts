@@ -43,7 +43,8 @@ export class Rasterizer {
             const screenY = this.calculateScreenY(i);
 
             for (const triangle of this.triangles) {
-                if (triangle.isInTriangle(screenX, screenY)) {
+                if (triangle.isInBoundingBox(screenX, screenY) &&
+                    triangle.isInTriangle(screenX, screenY)) {
                     const lambdaCords: Vector3 = triangle.toLambdaCoordinates(screenX, screenY);
                     const depth: number = Rasterizer.calculateDepth(lambdaCords, triangle);
                     if (depth < depthBuffer[i / 4]) {

@@ -22,6 +22,11 @@ export class Triangle {
     private readonly dyBC: number;
     private readonly dyCA: number;
 
+    private readonly minX: number;
+    private readonly maxX: number;
+    private readonly minY: number;
+    private readonly maxY: number;
+
     constructor(a: Vector3, b: Vector3, c: Vector3, aColor: Color, bColor: Color, cColor: Color) {
         this._a = a;
         this._b = b;
@@ -40,6 +45,11 @@ export class Triangle {
         this.screenA = new Vector3(x1, y1);
         this.screenB = new Vector3(x2, y2);
         this.screenC = new Vector3(x3, y3);
+
+        this.minX = Math.min(this.screenA.x, this.screenB.x, this.screenC.x);
+        this.maxX = Math.max(this.screenA.x, this.screenB.x, this.screenC.x);
+        this.minY = Math.min(this.screenA.y, this.screenB.y, this.screenC.y);
+        this.maxY = Math.max(this.screenA.y, this.screenB.y, this.screenC.y);
 
         this.dxAB = this.screenA.x - this.screenB.x;
         this.dxBC = this.screenB.x - this.screenC.x;
@@ -65,6 +75,11 @@ export class Triangle {
         return this.dxAB * (y - this.screenA.y) - this.dyAB * (x - this.screenA.x) > 0 &&
             this.dxBC * (y - this.screenB.y) - this.dyBC * (x - this.screenB.x) > 0 &&
             this.dxCA * (y - this.screenC.y) - this.dyCA * (x - this.screenC.x) > 0;
+    }
+
+    isInBoundingBox(x: number, y: number): boolean {
+        return x <= this.maxX && x >= this.minX &&
+            y <= this.maxY && y >= this.minY;
     }
 
     get a(): Vector3 {
