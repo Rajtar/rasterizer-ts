@@ -3,6 +3,7 @@ import {Color} from "../screen/Color";
 import {Settings} from "../screen/Settings";
 
 export class Triangle {
+
     private readonly _a: Vector3;
     private readonly _b: Vector3;
     private readonly _c: Vector3;
