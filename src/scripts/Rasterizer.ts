@@ -4,6 +4,7 @@ import {ScreenBuffer} from "./screen/ScreenBuffer";
 import {Color} from "./screen/Color";
 import {Vector3} from "./geometry/Vector3";
 import {Settings} from "./screen/Settings";
+import {Stopwatch} from "./Stopwatch";
 
 export class Rasterizer {
 
@@ -18,9 +19,13 @@ export class Rasterizer {
     }
 
     public launchRenderLoop(): void {
+        Stopwatch.start();
         this.render();
+        Stopwatch.stopAndLog("Rendering");
+        Stopwatch.start();
         this.targetScreen.setFpsDisplay(this.calculateFps());
-        window.requestAnimationFrame(this.launchRenderLoop.bind(this));
+        Stopwatch.stopAndLog("Calculating FPS");
+        // window.requestAnimationFrame(this.launchRenderLoop.bind(this));
     }
 
     private calculateFps(): number {
@@ -39,8 +44,10 @@ export class Rasterizer {
         for (let i = 0; i < screenBuffer.getLength(); i += 4) {
             screenBuffer.setColor(i, Settings.clearColor);
 
+            Stopwatch.start();
             const screenX = this.calculateScreenX(i);
             const screenY = this.calculateScreenY(i);
+            Stopwatch.stopAndLog("Calculating screen coordinates");
 
             for (const triangle of this.triangles) {
                 if (triangle.isInBoundingBox(screenX, screenY) &&
@@ -66,14 +73,20 @@ export class Rasterizer {
     }
 
     private static calculateDepth(lambdaCords: Vector3, triangle: Triangle): number {
-        return lambdaCords.x * triangle.a.z + lambdaCords.y * triangle.b.z + lambdaCords.z * triangle.c.z;
+        Stopwatch.start();
+        const depth = lambdaCords.x * triangle.a.z + lambdaCords.y * triangle.b.z + lambdaCords.z * triangle.c.z;
+        Stopwatch.stopAndLog("Calculating depth");
+        return depth;
     }
 
     private static calculateInterpolatedColor(lambdaCords: Vector3, triangle: Triangle): Color {
+        Stopwatch.start();
         const redInterpolated = lambdaCords.x * triangle.aColor.r + lambdaCords.y * triangle.bColor.r + lambdaCords.z * triangle.cColor.r;
         const greenInterpolated = lambdaCords.x * triangle.aColor.g + lambdaCords.y * triangle.bColor.g + lambdaCords.z * triangle.cColor.g;
         const blueInterpolated = lambdaCords.x * triangle.aColor.b + lambdaCords.y * triangle.bColor.b + lambdaCords.z * triangle.cColor.b;
-        return new Color(redInterpolated, greenInterpolated, blueInterpolated);
+        const color = new Color(redInterpolated, greenInterpolated, blueInterpolated);
+        Stopwatch.stopAndLog("Interpolating color");
+        return color;
     }
 
 }
