@@ -36,11 +36,11 @@ export class Vector3 {
     }
 
     add(other: Vector3): Vector3 {
-        return new Vector3(this._x + other._x, this._y + other._y, this._z + other._y)
+        return new Vector3(this._x + other._x, this._y + other._y, this._z + other._z)
     }
 
     substract(other: Vector3): Vector3 {
-        return new Vector3(this._x - other._x, this._y - other._y, this._z - other._y)
+        return new Vector3(this._x - other._x, this._y - other._y, this._z - other._z)
     }
 
     multiply(other: Vector3): Vector3

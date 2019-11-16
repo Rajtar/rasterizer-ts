@@ -4,6 +4,7 @@ import {Vector3} from "./geometry/Vector3";
 import {Triangle} from "./geometry/Triangle";
 import {Color} from "./screen/Color";
 import {Settings} from "./screen/Settings";
+import {VertexProcessor} from "./geometry/VertexProcessor";
 
 function initialize(): void {
     const canvas: HTMLCanvasElement = document.getElementById("screenCanvas") as HTMLCanvasElement;
@@ -15,22 +16,16 @@ function initialize(): void {
     const green: Color = new Color(0, 255, 0);
     const blue: Color = new Color(0, 0, 255);
 
-    const a1: Vector3 = new Vector3(0.75, 0, 0.5);
-    const b1: Vector3 = new Vector3(0.75, 0.5, 0.5);
-    const c1: Vector3 = new Vector3(-0.5, 0.6, 0.5);
-    const triangle1: Triangle = new Triangle(a1, b1, c1, red, green, blue);
+    const vp = new VertexProcessor();
+    vp.setLookAt(new Vector3(0, 0, -5), new Vector3(0, 0,0), new Vector3(0, 1, 0));
+    vp.setPerspective(45, 1, 0.1, 100);
 
-    const a2: Vector3 = new Vector3(0.5, 0, 0.85);
-    const b2: Vector3 = new Vector3(0.5, 0.5, 0.3);
-    const c2: Vector3 = new Vector3(-0.25, 0, 0.85);
-    const triangle2: Triangle = new Triangle(a2, b2, c2, blue, green, red);
+    const a1: Vector3 = vp.transform(new Vector3(0.75, 0, 0.5));
+    const b1: Vector3 = vp.transform(new Vector3(0.75, 0.5, 0.5));
+    const c1: Vector3 = vp.transform(new Vector3(-0.5, 0.6, 0.5));
+    const triangle1: Triangle = new Triangle(c1, b1, a1, red, green, blue);
 
-    const a3: Vector3 = new Vector3(-0.25, 0, 0.85);
-    const b3: Vector3 = new Vector3(0.5, -0.5, 0.3);
-    const c3: Vector3 = new Vector3(0.5, 0, 0.85);
-    const triangle3: Triangle = new Triangle(a3, b3, c3, blue, green, red);
-
-    const rasterizer: Rasterizer = new Rasterizer(targetScreen, [triangle1, triangle2, triangle3]);
+    const rasterizer: Rasterizer = new Rasterizer(targetScreen, [triangle1]);
     rasterizer.launchRenderLoop();
 }
 
