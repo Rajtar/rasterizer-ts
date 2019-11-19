@@ -4,23 +4,31 @@ import {ScreenBuffer} from "./screen/ScreenBuffer";
 import {Color} from "./screen/Color";
 import {Vector3} from "./geometry/Vector3";
 import {Settings} from "./screen/Settings";
+import {VertexProcessor} from "./geometry/VertexProcessor";
+import {CameraSettings} from "./Camera/CameraSettings";
 
 export class Rasterizer {
 
     private readonly targetScreen: ScreenHandler;
-    private readonly triangles: Triangle[];
+    private triangles: Triangle[];
     private lastCalledTime: DOMHighResTimeStamp;
-
 
     constructor(targetScreen: ScreenHandler, triangle: Triangle[]) {
         this.targetScreen = targetScreen;
         this.triangles = triangle;
     }
 
-    public launchRenderLoop(): void {
-        this.render();
+    public update(): void {
+        const trianglesToRender = [];
+        const vp = new VertexProcessor();
+        vp.setLookAt(CameraSettings.lookAt, CameraSettings.target, new Vector3(0, 1, 0));
+        vp.setPerspective(45, 1, 0.1, 100);
+        for (const triangle of this.triangles) {
+            trianglesToRender.push(new Triangle(vp.transform(triangle.a), vp.transform(triangle.b), vp.transform(triangle.c), triangle.aColor, triangle.bColor, triangle.cColor));
+        }
+        this.render(trianglesToRender);
         this.targetScreen.setFpsDisplay(this.calculateFps());
-        window.requestAnimationFrame(this.launchRenderLoop.bind(this));
+        window.requestAnimationFrame(this.update.bind(this));
     }
 
     private calculateFps(): number {
@@ -32,7 +40,7 @@ export class Rasterizer {
         return Math.round(1 / delta);
     }
 
-    private render(): void {
+    private render(trianglesToRender: Triangle[]): void {
         const screenBuffer = new ScreenBuffer(this.targetScreen.width, this.targetScreen.height);
         const depthBuffer: number[] = new Array(this.targetScreen.width * this.targetScreen.height).fill(Number.MAX_SAFE_INTEGER);
 
@@ -42,7 +50,7 @@ export class Rasterizer {
             const screenX = this.calculateScreenX(i);
             const screenY = this.calculateScreenY(i);
 
-            for (const triangle of this.triangles) {
+            for (const triangle of trianglesToRender) {
                 if (triangle.isInBoundingBox(screenX, screenY) &&
                     triangle.isInTriangle(screenX, screenY)) {
                     const lambdaCords: Vector3 = triangle.toLambdaCoordinates(screenX, screenY);
