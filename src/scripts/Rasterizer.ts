@@ -2,31 +2,42 @@ import {ScreenHandler} from "./screen/ScreenHandler";
 import {Triangle} from "./geometry/Triangle";
 import {ScreenBuffer} from "./screen/ScreenBuffer";
 import {Color} from "./screen/Color";
-import {Vector3} from "./geometry/Vector3";
+import {Vector3} from "./math/Vector3";
 import {Settings} from "./screen/Settings";
 import {VertexProcessor} from "./geometry/VertexProcessor";
 import {CameraSettings} from "./Camera/CameraSettings";
+import {DrawableObject} from "./geometry/DrawableObject";
 
 export class Rasterizer {
 
     private readonly targetScreen: ScreenHandler;
-    private triangles: Triangle[];
+    private readonly drawableObjects: DrawableObject[];
     private lastCalledTime: DOMHighResTimeStamp;
 
-    constructor(targetScreen: ScreenHandler, triangle: Triangle[]) {
+    constructor(targetScreen: ScreenHandler, drawableObjects: DrawableObject[]) {
         this.targetScreen = targetScreen;
-        this.triangles = triangle;
+        this.drawableObjects = drawableObjects;
     }
 
     public update(): void {
-        const trianglesToRender = [];
+        const objectsToRender = [];
         const vp = new VertexProcessor();
         vp.setLookAt(CameraSettings.lookAt, CameraSettings.target, new Vector3(0, 1, 0));
         vp.setPerspective(45, 1, 0.1, 100);
-        for (const triangle of this.triangles) {
-            trianglesToRender.push(new Triangle(vp.transform(triangle.a), vp.transform(triangle.b), vp.transform(triangle.c), triangle.aColor, triangle.bColor, triangle.cColor));
+        for (const object of this.drawableObjects) {
+            if (object instanceof Triangle) {
+                const triangleObject = object as Triangle;
+                objectsToRender.push(new Triangle(vp.transform(triangleObject.a, object.transform), vp.transform(triangleObject.b, object.transform), vp.transform(triangleObject.c, object.transform), triangleObject.aColor, triangleObject.bColor, triangleObject.cColor));
+            }
+
+            /***************************/
+            object.transform.scale(new Vector3(CameraSettings.scaling, CameraSettings.scaling, CameraSettings.scaling));
+            if (CameraSettings.rotationDirection.getMagnitude() != 0) {
+                object.transform.rotate(CameraSettings.rotationDirection, CameraSettings.rotationAngle);
+            }
+            /***************************/
         }
-        this.render(trianglesToRender);
+        this.render(objectsToRender);
         this.targetScreen.setFpsDisplay(this.calculateFps());
         window.requestAnimationFrame(this.update.bind(this));
     }
@@ -40,7 +51,7 @@ export class Rasterizer {
         return Math.round(1 / delta);
     }
 
-    private render(trianglesToRender: Triangle[]): void {
+    private render(triangles: Triangle[]): void {
         const screenBuffer = new ScreenBuffer(this.targetScreen.width, this.targetScreen.height);
         const depthBuffer: number[] = new Array(this.targetScreen.width * this.targetScreen.height).fill(Number.MAX_SAFE_INTEGER);
 
@@ -50,9 +61,8 @@ export class Rasterizer {
             const screenX = this.calculateScreenX(i);
             const screenY = this.calculateScreenY(i);
 
-            for (const triangle of trianglesToRender) {
-                if (triangle.isInBoundingBox(screenX, screenY) &&
-                    triangle.isInTriangle(screenX, screenY)) {
+            for (const triangle of triangles) {
+                if (triangle.isIn(screenX, screenY)) {
                     const lambdaCords: Vector3 = triangle.toLambdaCoordinates(screenX, screenY);
                     const depth: number = Rasterizer.calculateDepth(lambdaCords, triangle);
                     if (depth < depthBuffer[i / 4]) {

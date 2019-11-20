@@ -1,8 +1,9 @@
-import {Vector3} from "./Vector3";
+import {Vector3} from "../math/Vector3";
 import {Color} from "../screen/Color";
 import {Settings} from "../screen/Settings";
+import {DrawableObject} from "./DrawableObject";
 
-export class Triangle {
+export class Triangle extends DrawableObject {
 
     private readonly _a: Vector3;
     private readonly _b: Vector3;
@@ -33,6 +34,7 @@ export class Triangle {
     private readonly isCTopLeft: boolean;
 
     constructor(a: Vector3, b: Vector3, c: Vector3, aColor: Color, bColor: Color, cColor: Color) {
+        super();
         this._a = a;
         this._b = b;
         this._c = c;
@@ -80,7 +82,12 @@ export class Triangle {
         return new Vector3(lambdaA, lambdaB, lambdaC);
     }
 
-    isInTriangle(x: number, y: number): boolean {
+    isIn(x: number, y: number): boolean {
+        return this.isInBoundingBox(x, y) &&
+            this.isInTriangle(x, y);
+    }
+
+    private isInTriangle(x: number, y: number): boolean {
         const isABOk = (this.isATopLeft && this.isBTopLeft) ?
             this.dxAB * (y - this.screenA.y) - this.dyAB * (x - this.screenA.x) >= 0 :
             this.dxAB * (y - this.screenA.y) - this.dyAB * (x - this.screenA.x) > 0;
@@ -96,7 +103,7 @@ export class Triangle {
         return isABOk && isBCOk && isCAOk;
     }
 
-    isInBoundingBox(x: number, y: number): boolean {
+    private isInBoundingBox(x: number, y: number): boolean {
         return x <= this.maxX && x >= this.minX &&
             y <= this.maxY && y >= this.minY;
     }

@@ -1,5 +1,5 @@
 import {CameraSettings} from "../Camera/CameraSettings";
-import {Vector3} from "../geometry/Vector3";
+import {Vector3} from "../math/Vector3";
 
 export class KeyboardInput {
     static registerKeyBindings(): void {
@@ -34,6 +34,24 @@ export class KeyboardInput {
             if (event.key === '-') {
                 CameraSettings.lookAt = new Vector3(CameraSettings.lookAt.x, CameraSettings.lookAt.y - 0.01, CameraSettings.lookAt.z);
                 CameraSettings.target = new Vector3(CameraSettings.target.x, CameraSettings.target.y - 0.01, CameraSettings.target.z);
+                return;
+            }
+            if (event.key === 'n') {
+                CameraSettings.rotationDirection = new Vector3(1, 0, 0);
+                CameraSettings.rotationAngle += 0.001;
+                return;
+            }
+            if (event.key === 'm') {
+                CameraSettings.rotationDirection = new Vector3(1, 0, 0);
+                CameraSettings.rotationAngle += 0.001;
+                return;
+            }
+            if (event.key === 'j') {
+                CameraSettings.scaling -= 0.001;
+                return;
+            }
+            if (event.key === 'k') {
+                CameraSettings.scaling += 0.001;
                 return;
             }
         }, false);

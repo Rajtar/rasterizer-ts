@@ -4,11 +4,22 @@ export class Matrix4x4 {
 
     readonly data: [Float32Array, Float32Array, Float32Array, Float32Array];
 
-    constructor() {
-        this.data = [new Float32Array(4),
-            new Float32Array(4),
-            new Float32Array(4),
-            new Float32Array(4)];
+    constructor(asIdentity = false) {
+        if(asIdentity) {
+            this.data = [new Float32Array([1, 0, 0, 0]),
+                new Float32Array([0, 1, 0, 0]),
+                new Float32Array([0, 0, 1, 0]),
+                new Float32Array([0, 0, 0, 1])];
+        } else {
+            this.data = [new Float32Array(4),
+                new Float32Array(4),
+                new Float32Array(4),
+                new Float32Array(4)];
+        }
+    }
+
+    static createIdentity(): Matrix4x4 {
+        return new Matrix4x4(true);
     }
 
     multiply(other: Matrix4x4): Matrix4x4

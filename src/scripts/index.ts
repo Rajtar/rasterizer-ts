@@ -1,6 +1,6 @@
 import {ScreenHandler} from "./screen/ScreenHandler";
 import {Rasterizer} from "./Rasterizer";
-import {Vector3} from "./geometry/Vector3";
+import {Vector3} from "./math/Vector3";
 import {Triangle} from "./geometry/Triangle";
 import {Color} from "./screen/Color";
 import {Settings} from "./screen/Settings";
@@ -17,12 +17,16 @@ function initialize(): void {
     const green: Color = new Color(0, 255, 0);
     const blue: Color = new Color(0, 0, 255);
 
-    const a1: Vector3 = new Vector3(0.75, 0, 0.5);
-    const b1: Vector3 = new Vector3(0.75, 0.5, 0.5);
-    const c1: Vector3 = new Vector3(-0.5, 0.6, 0.5);
-    const triangle1: Triangle = new Triangle(a1, b1, c1, red, green, blue);
+    const a1: Vector3 = new Vector3(0.75, 0, 0);
+    const b1: Vector3 = new Vector3(0.75, 0.5, 0);
+    const c1: Vector3 = new Vector3(-0.5, 0.6, 0);
+    const triangle: Triangle = new Triangle(a1, b1, c1, red, green, blue);
 
-    const rasterizer: Rasterizer = new Rasterizer(targetScreen, [triangle1]);
+    // triangle.transform.translate(new Vector3(0, 0, -10));
+    // triangle.transform.scale(new Vector3(3, 3, 3));
+    // triangle.transform.rotate(new Vector3(1, 0, 0), 60);
+
+    const rasterizer: Rasterizer = new Rasterizer(targetScreen, [triangle]);
     rasterizer.update();
 }
 
