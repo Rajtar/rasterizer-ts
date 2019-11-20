@@ -37,13 +37,13 @@ export class KeyboardInput {
                 return;
             }
             if (event.key === 'n') {
-                CameraSettings.rotationDirection = new Vector3(1, 0, 0);
-                CameraSettings.rotationAngle += 0.001;
+                CameraSettings.rotationDirection = new Vector3(0, 1, 0);
+                CameraSettings.rotationAngle -= 0.1;
                 return;
             }
             if (event.key === 'm') {
-                CameraSettings.rotationDirection = new Vector3(1, 0, 0);
-                CameraSettings.rotationAngle += 0.001;
+                CameraSettings.rotationDirection = new Vector3(0, 1, 0);
+                CameraSettings.rotationAngle += 0.1;
                 return;
             }
             if (event.key === 'j') {
