@@ -4,7 +4,7 @@ import {ScreenBuffer} from "./screen/ScreenBuffer";
 import {Color} from "./screen/Color";
 import {Vector3} from "./math/Vector3";
 import {Settings} from "./screen/Settings";
-import {VertexProcessor} from "./geometry/VertexProcessor";
+import {Camera} from "./Camera/Camera";
 import {CameraSettings} from "./Camera/CameraSettings";
 import {DrawableObject} from "./geometry/DrawableObject";
 
@@ -12,22 +12,22 @@ export class Rasterizer {
 
     private readonly targetScreen: ScreenHandler;
     private readonly drawableObjects: DrawableObject[];
+    private readonly camera: Camera;
     private lastCalledTime: DOMHighResTimeStamp;
 
-    constructor(targetScreen: ScreenHandler, drawableObjects: DrawableObject[]) {
+    constructor(targetScreen: ScreenHandler, drawableObjects: DrawableObject[], camera: Camera) {
         this.targetScreen = targetScreen;
         this.drawableObjects = drawableObjects;
+        this.camera = camera;
     }
 
     public update(): void {
         const objectsToRender = [];
-        const vp = new VertexProcessor();
-        vp.setLookAt(CameraSettings.lookAt, CameraSettings.target, new Vector3(0, 1, 0));
-        vp.setPerspective(45, 1, 0.1, 100);
+        this.camera.setLookAt(CameraSettings.lookAt, CameraSettings.target, new Vector3(0, 1, 0));
         for (const object of this.drawableObjects) {
             if (object instanceof Triangle) {
                 const triangleObject = object as Triangle;
-                objectsToRender.push(new Triangle(vp.transform(triangleObject.a, object.transform), vp.transform(triangleObject.b, object.transform), vp.transform(triangleObject.c, object.transform), triangleObject.aColor, triangleObject.bColor, triangleObject.cColor));
+                objectsToRender.push(this.camera.project(triangleObject));
             }
 
             /***************************/

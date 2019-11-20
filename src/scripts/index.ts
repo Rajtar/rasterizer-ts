@@ -5,6 +5,8 @@ import {Triangle} from "./geometry/Triangle";
 import {Color} from "./screen/Color";
 import {Settings} from "./screen/Settings";
 import {KeyboardInput} from "./Input/KeyboardInput";
+import {Camera} from "./Camera/Camera";
+import {CameraSettings} from "./Camera/CameraSettings";
 
 function initialize(): void {
     const canvas: HTMLCanvasElement = document.getElementById("screenCanvas") as HTMLCanvasElement;
@@ -22,11 +24,15 @@ function initialize(): void {
     const c1: Vector3 = new Vector3(-0.5, 0.6, 0);
     const triangle: Triangle = new Triangle(a1, b1, c1, red, green, blue);
 
+    const camera = new Camera();
+    camera.setLookAt(CameraSettings.lookAt, CameraSettings.target, new Vector3(0, 1, 0));
+    camera.setPerspective(45, 1, 0.1, 100);
+
     // triangle.transform.translate(new Vector3(0, 0, -10));
     // triangle.transform.scale(new Vector3(3, 3, 3));
     // triangle.transform.rotate(new Vector3(1, 0, 0), 60);
 
-    const rasterizer: Rasterizer = new Rasterizer(targetScreen, [triangle]);
+    const rasterizer: Rasterizer = new Rasterizer(targetScreen, [triangle], camera);
     rasterizer.update();
 }
 
