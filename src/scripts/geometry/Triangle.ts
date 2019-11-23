@@ -1,6 +1,6 @@
 import {Vector3} from "../math/Vector3";
-import {Color} from "../screen/Color";
-import {Settings} from "../screen/Settings";
+import {Color} from "../io/output/screen/Color";
+import {Settings} from "../io/output/screen/Settings";
 import {DrawableObject} from "./DrawableObject";
 
 export class Triangle extends DrawableObject {

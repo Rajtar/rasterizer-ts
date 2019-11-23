@@ -1,11 +1,11 @@
-import {ScreenHandler} from "./screen/ScreenHandler";
+import {ScreenHandler} from "./io/output/screen/ScreenHandler";
 import {Triangle} from "./geometry/Triangle";
-import {ScreenBuffer} from "./screen/ScreenBuffer";
-import {Color} from "./screen/Color";
+import {ScreenBuffer} from "./io/output/screen/ScreenBuffer";
+import {Color} from "./io/output/screen/Color";
 import {Vector3} from "./math/Vector3";
-import {Settings} from "./screen/Settings";
+import {Settings} from "./io/output/screen/Settings";
 import {Camera} from "./Camera/Camera";
-import {KeyboardInputData} from "./Input/KeyboardInputData";
+import {KeyboardInputData} from "./io/input/keyboard/KeyboardInputData";
 import {DrawableObject} from "./geometry/DrawableObject";
 
 export class Rasterizer {

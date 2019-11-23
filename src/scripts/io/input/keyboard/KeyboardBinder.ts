@@ -1,5 +1,5 @@
 import {KeyboardInputData} from "./KeyboardInputData";
-import {Vector3} from "../math/Vector3";
+import {Vector3} from "../../../math/Vector3";
 
 export class KeyboardBinder {
     static registerKeyBindings(): void {

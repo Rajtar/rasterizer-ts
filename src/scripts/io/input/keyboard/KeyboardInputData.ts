@@ -1,4 +1,4 @@
-import {Vector3} from "../math/Vector3";
+import {Vector3} from "../../../math/Vector3";
 
 export class KeyboardInputData {
     static lookAt = new Vector3(0, 0, 5);
