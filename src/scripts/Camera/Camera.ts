@@ -3,6 +3,7 @@ import {Vector3} from "../math/Vector3";
 import {Triangle} from "../geometry/Triangle";
 
 export class Camera {
+
     private readonly projection: Matrix4x4 = new Matrix4x4();
     private readonly view: Matrix4x4 = new Matrix4x4();
     private projectionView: Matrix4x4;

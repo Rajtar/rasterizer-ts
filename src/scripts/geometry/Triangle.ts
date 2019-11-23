@@ -71,6 +71,10 @@ export class Triangle extends DrawableObject {
         this.isCTopLeft = this.dyCA < 0 || (this.dyCA === 0 && this.dxCA > 0);
     }
 
+    toTriangles(): Triangle[] {
+        return [this];
+    }
+
     toLambdaCoordinates(x: number, y: number): Vector3 {
         const lambdaA = (this.dyBC * (x - this.screenC.x) + -this.dxBC * (y - this.screenC.y)) /
             (this.dyBC * -this.dxCA + -this.dxBC * -this.dyCA);

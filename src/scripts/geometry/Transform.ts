@@ -2,10 +2,11 @@ import {Matrix4x4} from "../math/Matrix4x4";
 import {Vector3} from "../math/Vector3";
 
 export class Transform {
-    private _objectToWorld: Matrix4x4;
+
+    objectToWorld: Matrix4x4;
 
     constructor() {
-        this._objectToWorld = Matrix4x4.createIdentity();
+        this.objectToWorld = Matrix4x4.createIdentity();
     }
 
     translate(translation: Vector3): void {
@@ -14,7 +15,7 @@ export class Transform {
         translationMatrix.data[1] = new Float32Array([0, 1, 0, translation.y]);
         translationMatrix.data[2] = new Float32Array([0, 0, 1, translation.z]);
         translationMatrix.data[3] = new Float32Array([0, 0, 0, 1]);
-        this._objectToWorld = translationMatrix.multiply(this._objectToWorld);
+        this.objectToWorld = translationMatrix.multiply(this.objectToWorld);
     }
 
     scale(scaling: Vector3): void {
@@ -23,7 +24,7 @@ export class Transform {
         scalingMatrix.data[1] = new Float32Array([0, scaling.y, 0, 0]);
         scalingMatrix.data[2] = new Float32Array([0, 0, scaling.z, 0]);
         scalingMatrix.data[3] = new Float32Array([0, 0, 0, 1]);
-        this._objectToWorld = scalingMatrix.multiply(this._objectToWorld);
+        this.objectToWorld = scalingMatrix.multiply(this.objectToWorld);
     }
 
     rotate(rotationDirection: Vector3, angle: number): void {
@@ -55,10 +56,6 @@ export class Transform {
         rotationMatrix.data[3][2] = 0;
         rotationMatrix.data[3][3] = 1;
 
-        this._objectToWorld = rotationMatrix.multiply(this._objectToWorld);
-    }
-
-    get objectToWorld(): Matrix4x4 {
-        return this._objectToWorld;
+        this.objectToWorld = rotationMatrix.multiply(this.objectToWorld);
     }
 }

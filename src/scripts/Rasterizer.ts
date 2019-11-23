@@ -5,35 +5,39 @@ import {Color} from "./screen/Color";
 import {Vector3} from "./math/Vector3";
 import {Settings} from "./screen/Settings";
 import {Camera} from "./Camera/Camera";
-import {CameraSettings} from "./Camera/CameraSettings";
+import {KeyboardInputData} from "./Input/KeyboardInputData";
 import {DrawableObject} from "./geometry/DrawableObject";
 
 export class Rasterizer {
 
     private readonly targetScreen: ScreenHandler;
-    private readonly drawableObjects: DrawableObject[];
+    private readonly triangles: Triangle[];
     private readonly camera: Camera;
     private lastCalledTime: DOMHighResTimeStamp;
 
     constructor(targetScreen: ScreenHandler, drawableObjects: DrawableObject[], camera: Camera) {
         this.targetScreen = targetScreen;
-        this.drawableObjects = drawableObjects;
+        let accumulatedTriangles: Triangle[] = [];
+        for (const drawableObject of drawableObjects) {
+            accumulatedTriangles = accumulatedTriangles.concat(drawableObject.toTriangles());
+        }
+        this.triangles = accumulatedTriangles;
         this.camera = camera;
     }
 
     public update(): void {
         const objectsToRender = [];
-        this.camera.setLookAt(CameraSettings.lookAt, CameraSettings.target, new Vector3(0, 1, 0));
-        for (const object of this.drawableObjects) {
+        this.camera.setLookAt(KeyboardInputData.lookAt, KeyboardInputData.target, new Vector3(0, 1, 0));
+        for (const object of this.triangles) {
             if (object instanceof Triangle) {
                 const triangleObject = object as Triangle;
                 objectsToRender.push(this.camera.project(triangleObject));
             }
 
             /***************************/
-            object.transform.scale(new Vector3(CameraSettings.scaling, CameraSettings.scaling, CameraSettings.scaling));
-            if (CameraSettings.rotationDirection.getMagnitude() != 0) {
-                object.transform.rotate(CameraSettings.rotationDirection, CameraSettings.rotationAngle);
+            object.transform.scale(new Vector3(KeyboardInputData.scaling, KeyboardInputData.scaling, KeyboardInputData.scaling));
+            if (KeyboardInputData.rotationDirection.getMagnitude() != 0) {
+                object.transform.rotate(KeyboardInputData.rotationDirection, KeyboardInputData.rotationAngle);
             }
             /***************************/
         }

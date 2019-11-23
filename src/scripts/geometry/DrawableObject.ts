@@ -1,4 +1,5 @@
 import {Transform} from "./Transform";
+import {Triangle} from "./Triangle";
 
 export abstract class DrawableObject {
     private readonly _transform: Transform;
@@ -8,6 +9,7 @@ export abstract class DrawableObject {
     }
 
     abstract isIn(x: number, y: number): boolean;
+    abstract toTriangles(): Triangle[]
 
     get transform(): Transform {
         return this._transform;
