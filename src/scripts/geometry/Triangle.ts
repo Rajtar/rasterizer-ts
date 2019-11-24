@@ -24,10 +24,10 @@ export class Triangle extends DrawableObject {
     private readonly dyBC: number;
     private readonly dyCA: number;
 
-    private readonly minX: number;
-    private readonly maxX: number;
-    private readonly minY: number;
-    private readonly maxY: number;
+    private readonly _minX: number;
+    private readonly _maxX: number;
+    private readonly _minY: number;
+    private readonly _maxY: number;
 
     private readonly isATopLeft: boolean;
     private readonly isBTopLeft: boolean;
@@ -42,21 +42,21 @@ export class Triangle extends DrawableObject {
         this._bColor = bColor;
         this._cColor = cColor;
 
-        const x1 = (this.a.x + 1) * Settings.screenWidth * 0.5;
-        const x2 = (this.b.x + 1) * Settings.screenWidth * 0.5;
-        const x3 = (this.c.x + 1) * Settings.screenWidth * 0.5;
-        const y1 = Math.abs((this.a.y + 1) * Settings.screenHeight * 0.5 - Settings.screenHeight);
-        const y2 = Math.abs((this.b.y + 1) * Settings.screenHeight * 0.5 - Settings.screenHeight);
-        const y3 = Math.abs((this.c.y + 1) * Settings.screenHeight * 0.5 - Settings.screenHeight);
+        const x1 = Math.round((this.a.x + 1) * Settings.screenWidth * 0.5);
+        const x2 = Math.round((this.b.x + 1) * Settings.screenWidth * 0.5);
+        const x3 = Math.round((this.c.x + 1) * Settings.screenWidth * 0.5);
+        const y1 = Math.round(Math.abs((this.a.y + 1) * Settings.screenHeight * 0.5 - Settings.screenHeight));
+        const y2 = Math.round(Math.abs((this.b.y + 1) * Settings.screenHeight * 0.5 - Settings.screenHeight));
+        const y3 = Math.round(Math.abs((this.c.y + 1) * Settings.screenHeight * 0.5 - Settings.screenHeight));
 
         this.screenA = new Vector3(x1, y1);
         this.screenB = new Vector3(x2, y2);
         this.screenC = new Vector3(x3, y3);
 
-        this.minX = Math.min(this.screenA.x, this.screenB.x, this.screenC.x);
-        this.maxX = Math.max(this.screenA.x, this.screenB.x, this.screenC.x);
-        this.minY = Math.min(this.screenA.y, this.screenB.y, this.screenC.y);
-        this.maxY = Math.max(this.screenA.y, this.screenB.y, this.screenC.y);
+        this._minX = Math.min(this.screenA.x, this.screenB.x, this.screenC.x);
+        this._maxX = Math.max(this.screenA.x, this.screenB.x, this.screenC.x);
+        this._minY = Math.min(this.screenA.y, this.screenB.y, this.screenC.y);
+        this._maxY = Math.max(this.screenA.y, this.screenB.y, this.screenC.y);
 
         this.dxAB = this.screenA.x - this.screenB.x;
         this.dxBC = this.screenB.x - this.screenC.x;
@@ -91,6 +91,11 @@ export class Triangle extends DrawableObject {
             this.isInTriangle(x, y);
     }
 
+    private isInBoundingBox(x: number, y: number): boolean {
+        return x <= this._maxX && x >= this._minX &&
+            y <= this._maxY && y >= this._minY;
+    }
+
     private isInTriangle(x: number, y: number): boolean {
         const isABOk = (this.isATopLeft && this.isBTopLeft) ?
             this.dxAB * (y - this.screenA.y) - this.dyAB * (x - this.screenA.x) >= 0 :
@@ -105,11 +110,6 @@ export class Triangle extends DrawableObject {
             this.dxCA * (y - this.screenC.y) - this.dyCA * (x - this.screenC.x) > 0;
 
         return isABOk && isBCOk && isCAOk;
-    }
-
-    private isInBoundingBox(x: number, y: number): boolean {
-        return x <= this.maxX && x >= this.minX &&
-            y <= this.maxY && y >= this.minY;
     }
 
     get a(): Vector3 {
@@ -134,5 +134,21 @@ export class Triangle extends DrawableObject {
 
     get cColor(): Color {
         return this._cColor;
+    }
+
+    get minX(): number {
+        return this._minX;
+    }
+
+    get maxX(): number {
+        return this._maxX;
+    }
+
+    get minY(): number {
+        return this._minY;
+    }
+
+    get maxY(): number {
+        return this._maxY;
     }
 }

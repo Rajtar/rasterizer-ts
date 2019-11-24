@@ -3,7 +3,6 @@ import {Triangle} from "./geometry/Triangle";
 import {ScreenBuffer} from "./io/output/screen/ScreenBuffer";
 import {Color} from "./io/output/screen/Color";
 import {Vector3} from "./math/Vector3";
-import {Settings} from "./io/output/screen/Settings";
 import {Camera} from "./Camera/Camera";
 import {KeyboardInputData} from "./io/input/keyboard/KeyboardInputData";
 import {DrawableObject} from "./geometry/DrawableObject";
@@ -41,6 +40,7 @@ export class Rasterizer {
             }
             /***************************/
         }
+        this.targetScreen.clearScreen();
         this.render(objectsToRender);
         this.targetScreen.setFpsDisplay(this.calculateFps());
         window.requestAnimationFrame(this.update.bind(this));
@@ -59,32 +59,28 @@ export class Rasterizer {
         const screenBuffer = new ScreenBuffer(this.targetScreen.width, this.targetScreen.height);
         const depthBuffer: number[] = new Array(this.targetScreen.width * this.targetScreen.height).fill(Number.MAX_SAFE_INTEGER);
 
-        for (let i = 0; i < screenBuffer.getLength(); i += 4) {
-            screenBuffer.setColor(i, Settings.clearColor);
-
-            const screenX = this.calculateScreenX(i);
-            const screenY = this.calculateScreenY(i);
-
-            for (const triangle of triangles) {
-                if (triangle.isIn(screenX, screenY)) {
-                    const lambdaCords: Vector3 = triangle.toLambdaCoordinates(screenX, screenY);
-                    const depth: number = Rasterizer.calculateDepth(lambdaCords, triangle);
-                    if (depth < depthBuffer[i / 4]) {
-                        depthBuffer[i / 4] = depth;
-                        screenBuffer.setColor(i, Rasterizer.calculateInterpolatedColor(lambdaCords, triangle));
+        for (let t = 0, trianglesLength = triangles.length; t < trianglesLength; ++t) {
+            const currentTriangle = triangles[t];
+            for (let x = currentTriangle.minX; x <= currentTriangle.maxX; ++x) {
+                for (let y = currentTriangle.minY; y <= currentTriangle.maxY; ++y) {
+                    if (currentTriangle.isIn(x, y)) {
+                        const lambdaCords: Vector3 = currentTriangle.toLambdaCoordinates(x, y);
+                        const depth: number = Rasterizer.calculateDepth(lambdaCords, currentTriangle);
+                        const bufferIndex = this.calculateBufferIndex(x, y);
+                        if (depth < depthBuffer[bufferIndex / 4]) {
+                            depthBuffer[bufferIndex / 4] = depth;
+                            screenBuffer.setColor(bufferIndex, Rasterizer.calculateInterpolatedColor(lambdaCords, currentTriangle));
+                        }
                     }
                 }
             }
         }
+
         this.targetScreen.setPixelsFromBuffer(screenBuffer.buffer);
     }
 
-    private calculateScreenY(i: number): number {
-        return Math.floor((i / 4) / this.targetScreen.width);
-    }
-
-    private calculateScreenX(i: number): number {
-        return (i / 4) % this.targetScreen.width;
+    private calculateBufferIndex(screenX: number, screenY: number): number {
+        return Math.floor((screenY * this.targetScreen.width + screenX) * 4);
     }
 
     private static calculateDepth(lambdaCords: Vector3, triangle: Triangle): number {

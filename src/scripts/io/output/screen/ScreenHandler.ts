@@ -1,3 +1,5 @@
+import {Settings} from "./Settings";
+
 export class ScreenHandler {
 
     private readonly _canvasCtx: CanvasRenderingContext2D;
@@ -13,6 +15,10 @@ export class ScreenHandler {
     setPixelsFromBuffer(colorBuffer: Uint8ClampedArray): void {
         const imageData: ImageData = new ImageData(colorBuffer, this.width, this.height);
         this._canvasCtx.putImageData(imageData,0,0);
+    }
+
+    clearScreen(): void {
+        this._canvasCtx.clearRect(0, 0, Settings.screenWidth, Settings.screenHeight);
     }
 
     setFpsDisplay(fps: number): void {

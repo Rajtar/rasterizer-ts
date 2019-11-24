@@ -17,13 +17,15 @@ function initialize(): void {
 
     const camera = new Camera();
     camera.setLookAt(KeyboardInputData.lookAt, KeyboardInputData.target, new Vector3(0, 1, 0));
-    camera.setPerspective(45, 16 / 9, 0.1, 100);
+    camera.setPerspective(45, 16/9, 0.1, 100);
 
-    const cubeText = FileLoader.loadFile("resources/models/octahedron.obj");
+    const objText = FileLoader.loadFile("resources/models/teapot.obj");
     const meshLoader = new ObjLoader();
-    const objCube = meshLoader.loadMesh(cubeText);
+    const objMesh = meshLoader.loadMesh(objText);
 
-    const rasterizer: Rasterizer = new Rasterizer(targetScreen, [objCube], camera);
+    objMesh.transform.scale(new Vector3(0.4, 0.4, 0.4));
+
+    const rasterizer: Rasterizer = new Rasterizer(targetScreen, [objMesh], camera);
     rasterizer.update();
 }
 
