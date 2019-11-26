@@ -87,8 +87,7 @@ export class Triangle extends DrawableObject {
     }
 
     isIn(x: number, y: number): boolean {
-        return this.isInBoundingBox(x, y) &&
-            this.isInTriangle(x, y);
+        return this.isInTriangle(x, y);
     }
 
     private isInBoundingBox(x: number, y: number): boolean {
