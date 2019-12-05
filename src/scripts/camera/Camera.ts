@@ -37,7 +37,10 @@ export class Camera {
         const newA = projectionViewWorld.multiply(triangle.a);
         const newB = projectionViewWorld.multiply(triangle.b);
         const newC = projectionViewWorld.multiply(triangle.c);
-        return new Triangle(newA, newB, newC, triangle.aColor, triangle.bColor, triangle.cColor);
+        const newANormal = projectionViewWorld.multiply(triangle.aNormal);
+        const newBNormal = projectionViewWorld.multiply(triangle.bNormal);
+        const newCNormal = projectionViewWorld.multiply(triangle.cNormal);
+        return new Triangle(newA, newB, newC, newANormal, newBNormal, newCNormal, triangle.aColor, triangle.bColor, triangle.cColor);
     }
 
     private updateProjectionView(): void {

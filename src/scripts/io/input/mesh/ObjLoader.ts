@@ -2,7 +2,7 @@ import {MeshLoader} from "./MeshLoader";
 import {Mesh} from "../../../geometry/Mesh";
 import {Vector3} from "../../../math/Vector3";
 import {Triangle} from "../../../geometry/Triangle";
-import {Color} from "../../output/screen/Color";
+import {Color} from "../../../camera/Color";
 
 export class ObjLoader implements MeshLoader {
 
@@ -46,11 +46,11 @@ export class ObjLoader implements MeshLoader {
             const splitVertexInfo = vertexInfo.split(/\//);
             faceVertexIndices.push(parseInt(splitVertexInfo[0]));
 
-            if(splitVertexInfo.length == 2) {
+            if (splitVertexInfo.length == 2) {
                 if (splitVertexInfo[1] != "") {
                     faceTextureIndices.push(parseInt(splitVertexInfo[1]));
                 }
-            } else if(splitVertexInfo.length == 3) {
+            } else if (splitVertexInfo.length == 3) {
                 if (splitVertexInfo[1] != "") {
                     faceTextureIndices.push(parseInt(splitVertexInfo[1]));
                 }
@@ -59,11 +59,10 @@ export class ObjLoader implements MeshLoader {
                 }
             }
         }
-
-        const red: Color = new Color(255, 0, 0);
-        const green: Color = new Color(0, 255, 0);
-        const blue: Color = new Color(0, 0, 255);
-        const face = new Triangle(this.vertices[(faceVertexIndices[0] - 1)], this.vertices[(faceVertexIndices[1] - 1)], this.vertices[(faceVertexIndices[2] - 1)], red, green, blue);
+        const white = new Color(255, 255, 255);
+        const face = new Triangle(this.vertices[(faceVertexIndices[0] - 1)], this.vertices[(faceVertexIndices[1] - 1)], this.vertices[(faceVertexIndices[2] - 1)],
+            this.normals[(faceNormalIndices[0] - 1)], this.normals[(faceNormalIndices[1] - 1)], this.normals[(faceNormalIndices[2] - 1)],
+            white, white, white);
         this.faces.push(face);
     }
 }

@@ -1,26 +1,29 @@
 import {ScreenHandler} from "./io/output/screen/ScreenHandler";
 import {Triangle} from "./geometry/Triangle";
 import {ScreenBuffer} from "./io/output/screen/ScreenBuffer";
-import {Color} from "./io/output/screen/Color";
+import {Color} from "./camera/Color";
 import {Vector3} from "./math/Vector3";
-import {Camera} from "./Camera/Camera";
+import {Camera} from "./camera/Camera";
 import {KeyboardInputData} from "./io/input/keyboard/KeyboardInputData";
 import {DrawableObject} from "./geometry/DrawableObject";
+import {Light} from "./light/Light";
 
 export class Rasterizer {
 
     private readonly targetScreen: ScreenHandler;
     private readonly triangles: Triangle[];
+    private readonly lights: Light[];
     private readonly camera: Camera;
     private lastCalledTime: DOMHighResTimeStamp;
 
-    constructor(targetScreen: ScreenHandler, drawableObjects: DrawableObject[], camera: Camera) {
+    constructor(targetScreen: ScreenHandler, drawableObjects: DrawableObject[], lights: Light[], camera: Camera) {
         this.targetScreen = targetScreen;
         let accumulatedTriangles: Triangle[] = [];
         for (const drawableObject of drawableObjects) {
             accumulatedTriangles = accumulatedTriangles.concat(drawableObject.toTriangles());
         }
         this.triangles = accumulatedTriangles;
+        this.lights = lights;
         this.camera = camera;
     }
 
@@ -30,7 +33,9 @@ export class Rasterizer {
         for (const object of this.triangles) {
             if (object instanceof Triangle) {
                 const triangleObject = object as Triangle;
-                objectsToRender.push(this.camera.project(triangleObject));
+                const projectedTriangle = this.camera.project(triangleObject);
+                const enlightedTriangle = this.lights[0].enlighten(projectedTriangle);      // TODO: support multiple lights
+                objectsToRender.push(enlightedTriangle);
             }
 
             /***************************/

@@ -1,5 +1,5 @@
 import {Vector3} from "../math/Vector3";
-import {Color} from "../io/output/screen/Color";
+import {Color} from "../camera/Color";
 import {Settings} from "../io/output/screen/Settings";
 import {DrawableObject} from "./DrawableObject";
 
@@ -8,6 +8,10 @@ export class Triangle extends DrawableObject {
     private readonly _a: Vector3;
     private readonly _b: Vector3;
     private readonly _c: Vector3;
+
+    private readonly _aNormal: Vector3;
+    private readonly _bNormal: Vector3;
+    private readonly _cNormal: Vector3;
 
     private readonly _aColor: Color;
     private readonly _bColor: Color;
@@ -33,11 +37,14 @@ export class Triangle extends DrawableObject {
     private readonly isBTopLeft: boolean;
     private readonly isCTopLeft: boolean;
 
-    constructor(a: Vector3, b: Vector3, c: Vector3, aColor: Color, bColor: Color, cColor: Color) {
+    constructor(a: Vector3, b: Vector3, c: Vector3, aNormal: Vector3, bNormal: Vector3, cNormal: Vector3, aColor = Color.RED, bColor = Color.GREEN, cColor = Color.BLUE) {
         super();
         this._a = a;
         this._b = b;
         this._c = c;
+        this._aNormal = aNormal;
+        this._bNormal = bNormal;
+        this._cNormal = cNormal;
         this._aColor = aColor;
         this._bColor = bColor;
         this._cColor = cColor;
@@ -69,6 +76,10 @@ export class Triangle extends DrawableObject {
         this.isATopLeft = this.dyAB < 0 || (this.dyAB === 0 && this.dxAB > 0);
         this.isBTopLeft = this.dyBC < 0 || (this.dyBC === 0 && this.dxBC > 0);
         this.isCTopLeft = this.dyCA < 0 || (this.dyCA === 0 && this.dxCA > 0);
+    }
+
+    withColors(newAColor: Color, newBColor: Color, newCColor: Color): Triangle {
+        return new Triangle(this.a, this.b, this.c, this.aNormal, this.bNormal, this.cNormal, newAColor, newBColor, newCColor);
     }
 
     toTriangles(): Triangle[] {
@@ -121,6 +132,18 @@ export class Triangle extends DrawableObject {
 
     get c(): Vector3 {
         return this._c;
+    }
+
+    get aNormal(): Vector3 {
+        return this._aNormal;
+    }
+
+    get bNormal(): Vector3 {
+        return this._bNormal;
+    }
+
+    get cNormal(): Vector3 {
+        return this._cNormal;
     }
 
     get aColor(): Color {

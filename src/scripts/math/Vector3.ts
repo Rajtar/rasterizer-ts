@@ -25,6 +25,11 @@ export class Vector3 {
         return this.divide(this.getMagnitude());
     }
 
+    getReflected(normal: Vector3): Vector3 {
+        const n = normal.getNormalized();
+        return this.substract(n.multiply(2 * this.dot(n)));
+    }
+
     dot(other: Vector3): number {
         return this._x * other._x + this._y * other._y + this._z * other._z;
     }
