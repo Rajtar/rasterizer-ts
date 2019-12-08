@@ -18,19 +18,19 @@ function initialize(): void {
     KeyboardBinder.registerKeyBindings();
 
     const camera = new Camera();
-    camera.setLookAt(KeyboardInputData.lookAt, KeyboardInputData.target, new Vector3(0, 1, 0));
+    camera.setLookAt(KeyboardInputData.cameraPosition, KeyboardInputData.cameraTarget, new Vector3(0, 1, 0));
     camera.setPerspective(45, 16/9, 0.1, 100);
 
-    const objText = FileLoader.loadFile("resources/models/cube.obj");
+    const objText = FileLoader.loadFile("resources/models/teapot.obj");
     const meshLoader = new ObjLoader();
     const objMesh = meshLoader.loadMesh(objText);
 
-    // objMesh.transform.scale(new Vector3(0.8, 0.8, 0.8));
+    objMesh.transform.scale(new Vector3(1.25, 1.25, 1.25));
 
     const lightPosition = new Vector3(0, 0, 10);
     const ambientLightColor = new Color(0, 0, 0);
-    const diffuseLightColor = new Color(0, 0, 0);
-    const specularLightColor = new Color(20, 20, 20);
+    const diffuseLightColor = new Color(0.25, 0.15, 0);
+    const specularLightColor = new Color(0.15, 0.15, 0.15);
 
     const light = new DirectionalLight(lightPosition, ambientLightColor, diffuseLightColor, specularLightColor, 1);
 

@@ -2,6 +2,7 @@ import {Vector3} from "../math/Vector3";
 import {Color} from "../camera/Color";
 import {Settings} from "../io/output/screen/Settings";
 import {DrawableObject} from "./DrawableObject";
+import {MathUtils} from "../math/MathUtils";
 
 export class Triangle extends DrawableObject {
 
@@ -33,9 +34,9 @@ export class Triangle extends DrawableObject {
     private readonly _minY: number;
     private readonly _maxY: number;
 
-    private readonly isATopLeft: boolean;
-    private readonly isBTopLeft: boolean;
-    private readonly isCTopLeft: boolean;
+    private readonly isABTopLeft: boolean;
+    private readonly isBCTopLeft: boolean;
+    private readonly isCATopLeft: boolean;
 
     constructor(a: Vector3, b: Vector3, c: Vector3, aNormal: Vector3, bNormal: Vector3, cNormal: Vector3, aColor = Color.RED, bColor = Color.GREEN, cColor = Color.BLUE) {
         super();
@@ -56,9 +57,16 @@ export class Triangle extends DrawableObject {
         const y2 = Math.round(Math.abs((this.b.y + 1) * Settings.screenHeight * 0.5 - Settings.screenHeight));
         const y3 = Math.round(Math.abs((this.c.y + 1) * Settings.screenHeight * 0.5 - Settings.screenHeight));
 
-        this.screenA = new Vector3(x1, y1);
-        this.screenB = new Vector3(x2, y2);
-        this.screenC = new Vector3(x3, y3);
+        const clippedX1 = MathUtils.clampFromZero(x1, Settings.screenWidth);
+        const clippedY1 = MathUtils.clampFromZero(y1, Settings.screenHeight);
+        const clippedX2 = MathUtils.clampFromZero(x2, Settings.screenWidth);
+        const clippedY2 = MathUtils.clampFromZero(y2, Settings.screenHeight);
+        const clippedX3 = MathUtils.clampFromZero(x3, Settings.screenWidth);
+        const clippedY3 = MathUtils.clampFromZero(y3, Settings.screenHeight);
+
+        this.screenA = new Vector3(clippedX1, clippedY1);
+        this.screenB = new Vector3(clippedX2, clippedY2);
+        this.screenC = new Vector3(clippedX3, clippedY3);
 
         this._minX = Math.min(this.screenA.x, this.screenB.x, this.screenC.x);
         this._maxX = Math.max(this.screenA.x, this.screenB.x, this.screenC.x);
@@ -73,9 +81,9 @@ export class Triangle extends DrawableObject {
         this.dyBC = this.screenB.y - this.screenC.y;
         this.dyCA = this.screenC.y - this.screenA.y;
 
-        this.isATopLeft = this.dyAB < 0 || (this.dyAB === 0 && this.dxAB > 0);
-        this.isBTopLeft = this.dyBC < 0 || (this.dyBC === 0 && this.dxBC > 0);
-        this.isCTopLeft = this.dyCA < 0 || (this.dyCA === 0 && this.dxCA > 0);
+        this.isABTopLeft = this.dyAB < 0 || (this.dyAB === 0 && this.dxAB > 0);
+        this.isBCTopLeft = this.dyBC < 0 || (this.dyBC === 0 && this.dxBC > 0);
+        this.isCATopLeft = this.dyCA < 0 || (this.dyCA === 0 && this.dxCA > 0);
     }
 
     withColors(newAColor: Color, newBColor: Color, newCColor: Color): Triangle {
@@ -98,26 +106,21 @@ export class Triangle extends DrawableObject {
     }
 
     isIn(x: number, y: number): boolean {
-        return this.isInTriangle(x, y);
-    }
+        let isABOk: boolean;
+        this.isABTopLeft ?
+            isABOk = this.dxAB * (y - this.screenA.y) - this.dyAB * (x - this.screenA.x) >= 0 :
+            isABOk = this.dxAB * (y - this.screenA.y) - this.dyAB * (x - this.screenA.x) > 0;
 
-    private isInBoundingBox(x: number, y: number): boolean {
-        return x <= this._maxX && x >= this._minX &&
-            y <= this._maxY && y >= this._minY;
-    }
 
-    private isInTriangle(x: number, y: number): boolean {
-        const isABOk = (this.isATopLeft && this.isBTopLeft) ?
-            this.dxAB * (y - this.screenA.y) - this.dyAB * (x - this.screenA.x) >= 0 :
-            this.dxAB * (y - this.screenA.y) - this.dyAB * (x - this.screenA.x) > 0;
+        let isBCOk: boolean;
+        this.isBCTopLeft ?
+            isBCOk = this.dxBC * (y - this.screenB.y) - this.dyBC * (x - this.screenB.x) >= 0 :
+            isBCOk = this.dxBC * (y - this.screenB.y) - this.dyBC * (x - this.screenB.x) > 0;
 
-        const isBCOk = (this.isBTopLeft && this.isCTopLeft) ?
-            this.dxBC * (y - this.screenB.y) - this.dyBC * (x - this.screenB.x) >= 0 :
-            this.dxBC * (y - this.screenB.y) - this.dyBC * (x - this.screenB.x) > 0;
-
-        const isCAOk = (this.isCTopLeft && this.isATopLeft) ?
-            this.dxCA * (y - this.screenC.y) - this.dyCA * (x - this.screenC.x) >= 0 :
-            this.dxCA * (y - this.screenC.y) - this.dyCA * (x - this.screenC.x) > 0;
+        let isCAOk: boolean;
+        this.isCATopLeft ?
+            isCAOk = this.dxCA * (y - this.screenC.y) - this.dyCA * (x - this.screenC.x) >= 0 :
+            isCAOk = this.dxCA * (y - this.screenC.y) - this.dyCA * (x - this.screenC.x) > 0;
 
         return isABOk && isBCOk && isCAOk;
     }

@@ -10,13 +10,13 @@ export class DirectionalLight extends Light {
     }
 
     enlighten(triangle: Triangle): Triangle {
-        const newAColor = this.calculateVertexColor(triangle.a, triangle.aNormal);
-        const newBColor = this.calculateVertexColor(triangle.b, triangle.bNormal);
-        const newCColor = this.calculateVertexColor(triangle.c, triangle.cNormal);
+        const newAColor = this.calculateVertexColor(triangle.a, triangle.aColor, triangle.aNormal);
+        const newBColor = this.calculateVertexColor(triangle.b, triangle.bColor, triangle.bNormal);
+        const newCColor = this.calculateVertexColor(triangle.c, triangle.cColor, triangle.cNormal);
         return triangle.withColors(newAColor, newBColor, newCColor);
     }
 
-    calculateVertexColor(vertex: Vector3, normal: Vector3): Color {
+    calculateVertexColor(vertex: Vector3, vertexColor: Color, normal: Vector3): Color {
         const N = normal.getNormalized();
         const V = vertex.multiply(-1);
         const R = this.position.getReflected(N);
@@ -24,9 +24,9 @@ export class DirectionalLight extends Light {
         const iD = this.position.dot(N);
         const iS = Math.pow(R.dot(V), this.shininess);
 
-        const rChannel = this.ambient.r + iD * this.diffuse.r + iS * this.specular.r;
-        const gChannel = this.ambient.g + iD * this.diffuse.g + iS * this.specular.g;
-        const bChannel = this.ambient.b + iD * this.diffuse.b + iS * this.specular.b;
+        const rChannel = vertexColor.r * (this.ambient.r + (iD / 10 * this.diffuse.r) + (iS / 10 * this.specular.r));
+        const gChannel = vertexColor.g * (this.ambient.g + (iD / 10 * this.diffuse.g) + (iS / 10 * this.specular.g));
+        const bChannel = vertexColor.b * (this.ambient.b + (iD / 10 * this.diffuse.b) + (iS / 10 * this.specular.b));
 
         return new Color(rChannel, gChannel, bChannel);
     }

@@ -5,35 +5,35 @@ export class KeyboardBinder {
     static registerKeyBindings(): void {
         document.addEventListener('keydown', (event) => {
             if (event.key === 'a') {
-                KeyboardInputData.lookAt = new Vector3(KeyboardInputData.lookAt.x - 0.01, KeyboardInputData.lookAt.y, KeyboardInputData.lookAt.z);
-                KeyboardInputData.target = new Vector3(KeyboardInputData.target.x - 0.01, KeyboardInputData.target.y, KeyboardInputData.target.z);
+                KeyboardInputData.cameraPosition = new Vector3(KeyboardInputData.cameraPosition.x - 0.01, KeyboardInputData.cameraPosition.y, KeyboardInputData.cameraPosition.z);
+                KeyboardInputData.cameraTarget = new Vector3(KeyboardInputData.cameraTarget.x - 0.01, KeyboardInputData.cameraTarget.y, KeyboardInputData.cameraTarget.z);
                 return;
             }
             if (event.key === 'd') {
-                KeyboardInputData.lookAt = new Vector3(KeyboardInputData.lookAt.x + 0.01, KeyboardInputData.lookAt.y, KeyboardInputData.lookAt.z);
-                KeyboardInputData.target = new Vector3(KeyboardInputData.target.x + 0.01, KeyboardInputData.target.y, KeyboardInputData.target.z);
+                KeyboardInputData.cameraPosition = new Vector3(KeyboardInputData.cameraPosition.x + 0.01, KeyboardInputData.cameraPosition.y, KeyboardInputData.cameraPosition.z);
+                KeyboardInputData.cameraTarget = new Vector3(KeyboardInputData.cameraTarget.x + 0.01, KeyboardInputData.cameraTarget.y, KeyboardInputData.cameraTarget.z);
                 return;
             }
 
             if (event.key === 'w') {
-                KeyboardInputData.lookAt = new Vector3(KeyboardInputData.lookAt.x, KeyboardInputData.lookAt.y, KeyboardInputData.lookAt.z - 0.01);
-                KeyboardInputData.target = new Vector3(KeyboardInputData.target.x, KeyboardInputData.target.y, KeyboardInputData.target.z - 0.01);
+                KeyboardInputData.cameraPosition = new Vector3(KeyboardInputData.cameraPosition.x, KeyboardInputData.cameraPosition.y, KeyboardInputData.cameraPosition.z - 0.01);
+                KeyboardInputData.cameraTarget = new Vector3(KeyboardInputData.cameraTarget.x, KeyboardInputData.cameraTarget.y, KeyboardInputData.cameraTarget.z - 0.01);
                 return;
             }
             if (event.key === 's') {
-                KeyboardInputData.lookAt = new Vector3(KeyboardInputData.lookAt.x, KeyboardInputData.lookAt.y, KeyboardInputData.lookAt.z + 0.01);
-                KeyboardInputData.target = new Vector3(KeyboardInputData.target.x, KeyboardInputData.target.y, KeyboardInputData.target.z + 0.01);
+                KeyboardInputData.cameraPosition = new Vector3(KeyboardInputData.cameraPosition.x, KeyboardInputData.cameraPosition.y, KeyboardInputData.cameraPosition.z + 0.01);
+                KeyboardInputData.cameraTarget = new Vector3(KeyboardInputData.cameraTarget.x, KeyboardInputData.cameraTarget.y, KeyboardInputData.cameraTarget.z + 0.01);
                 return;
             }
 
             if (event.key === '+') {
-                KeyboardInputData.lookAt = new Vector3(KeyboardInputData.lookAt.x, KeyboardInputData.lookAt.y + 0.01, KeyboardInputData.lookAt.z);
-                KeyboardInputData.target = new Vector3(KeyboardInputData.target.x, KeyboardInputData.target.y + 0.01, KeyboardInputData.target.z);
+                KeyboardInputData.cameraPosition = new Vector3(KeyboardInputData.cameraPosition.x, KeyboardInputData.cameraPosition.y + 0.01, KeyboardInputData.cameraPosition.z);
+                KeyboardInputData.cameraTarget = new Vector3(KeyboardInputData.cameraTarget.x, KeyboardInputData.cameraTarget.y + 0.01, KeyboardInputData.cameraTarget.z);
                 return;
             }
             if (event.key === '-') {
-                KeyboardInputData.lookAt = new Vector3(KeyboardInputData.lookAt.x, KeyboardInputData.lookAt.y - 0.01, KeyboardInputData.lookAt.z);
-                KeyboardInputData.target = new Vector3(KeyboardInputData.target.x, KeyboardInputData.target.y - 0.01, KeyboardInputData.target.z);
+                KeyboardInputData.cameraPosition = new Vector3(KeyboardInputData.cameraPosition.x, KeyboardInputData.cameraPosition.y - 0.01, KeyboardInputData.cameraPosition.z);
+                KeyboardInputData.cameraTarget = new Vector3(KeyboardInputData.cameraTarget.x, KeyboardInputData.cameraTarget.y - 0.01, KeyboardInputData.cameraTarget.z);
                 return;
             }
             if (event.key === 'n') {

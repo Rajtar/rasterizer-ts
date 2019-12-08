@@ -29,13 +29,13 @@ export class Rasterizer {
 
     public update(): void {
         const objectsToRender = [];
-        this.camera.setLookAt(KeyboardInputData.lookAt, KeyboardInputData.target, new Vector3(0, 1, 0));
+        this.camera.setLookAt(KeyboardInputData.cameraPosition, KeyboardInputData.cameraTarget, new Vector3(0, 1, 0));
         for (const object of this.triangles) {
             if (object instanceof Triangle) {
                 const triangleObject = object as Triangle;
                 const projectedTriangle = this.camera.project(triangleObject);
-                const enlightedTriangle = this.lights[0].enlighten(projectedTriangle);      // TODO: support multiple lights
-                objectsToRender.push(enlightedTriangle);
+                const enlightenedTriangle = this.lights[0].enlighten(projectedTriangle);      // TODO: support multiple lights
+                objectsToRender.push(enlightenedTriangle);
             }
 
             /***************************/

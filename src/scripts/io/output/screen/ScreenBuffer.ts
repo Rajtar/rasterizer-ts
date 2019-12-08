@@ -1,4 +1,5 @@
 import {Color} from "../../../camera/Color";
+import {Settings} from "./Settings";
 
 export class ScreenBuffer {
 
@@ -6,6 +7,12 @@ export class ScreenBuffer {
 
     constructor(screenWidth: number, screenHeight: number) {
         this._buffer = new Uint8ClampedArray(screenWidth * screenHeight * 4);
+        for (let i = 0, bufferLength = this._buffer.length; i < bufferLength; i+=4) {
+            this._buffer[i] = Settings.clearColor.r;
+            this._buffer[i+1] = Settings.clearColor.g;
+            this._buffer[i+2] = Settings.clearColor.b;
+            this._buffer[i+3] = Settings.clearColor.a;
+        }
     }
 
     getLength(): number {
