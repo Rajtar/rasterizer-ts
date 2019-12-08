@@ -21,7 +21,7 @@ function initialize(): void {
     camera.setLookAt(KeyboardInputData.cameraPosition, KeyboardInputData.cameraTarget, new Vector3(0, 1, 0));
     camera.setPerspective(45, 16/9, 0.1, 100);
 
-    const objText = FileLoader.loadFile("resources/models/teapot.obj");
+    const objText = FileLoader.loadFile("resources/models/monkey.obj");
     const meshLoader = new ObjLoader();
     const objMesh = meshLoader.loadMesh(objText);
 
