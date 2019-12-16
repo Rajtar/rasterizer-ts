@@ -36,6 +36,7 @@ export class KeyboardBinder {
                 KeyboardInputData.cameraTarget = new Vector3(KeyboardInputData.cameraTarget.x, KeyboardInputData.cameraTarget.y - 0.01, KeyboardInputData.cameraTarget.z);
                 return;
             }
+
             if (event.key === 'n') {
                 KeyboardInputData.rotationDirection = new Vector3(0, 1, 0);
                 KeyboardInputData.rotationAngle -= 0.1;
@@ -46,14 +47,34 @@ export class KeyboardBinder {
                 KeyboardInputData.rotationAngle += 0.1;
                 return;
             }
-            if (event.key === 'j') {
+
+            if (event.key === 'o') {
                 KeyboardInputData.scaling -= 0.001;
                 return;
             }
-            if (event.key === 'k') {
+            if (event.key === 'p') {
                 KeyboardInputData.scaling += 0.001;
                 return;
             }
+
+            if (event.key === 'u') {
+                KeyboardInputData.lightPosition = new Vector3(KeyboardInputData.lightPosition.x, KeyboardInputData.lightPosition.y + 0.1, KeyboardInputData.lightPosition.z);
+                return;
+            }
+            if (event.key === 'j') {
+                KeyboardInputData.lightPosition = new Vector3(KeyboardInputData.lightPosition.x, KeyboardInputData.lightPosition.y - 0.1, KeyboardInputData.lightPosition.z);
+                return;
+            }
+
+            if (event.key === 'k') {
+                KeyboardInputData.lightPosition = new Vector3(KeyboardInputData.lightPosition.x + 0.1, KeyboardInputData.lightPosition.y, KeyboardInputData.lightPosition.z);
+                return;
+            }
+            if (event.key === 'h') {
+                KeyboardInputData.lightPosition = new Vector3(KeyboardInputData.lightPosition.x - 0.1, KeyboardInputData.lightPosition.y, KeyboardInputData.lightPosition.z);
+                return;
+            }
+
         }, false);
     }
 }

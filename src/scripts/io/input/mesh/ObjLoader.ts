@@ -6,11 +6,12 @@ import {Color} from "../../../camera/Color";
 
 export class ObjLoader implements MeshLoader {
 
-    private readonly vertices: Vector3[] = [];
-    private readonly normals: Vector3[] = [];
-    private readonly faces: Triangle[] = [];
+    private vertices: Vector3[] = [];
+    private normals: Vector3[] = [];
+    private faces: Triangle[] = [];
 
     loadMesh(meshAsText: string): Mesh {
+        this.reset();
         const fileLines = meshAsText.split(/\r?\n/);
         for (const line of fileLines) {
             const lineSegments = line.split(/\s+/);
@@ -27,17 +28,17 @@ export class ObjLoader implements MeshLoader {
         return new Mesh(this.faces);
     }
 
-    parseVertex(values: string[]): void {
+    private parseVertex(values: string[]): void {
         const vertex = new Vector3(parseFloat(values[0]), parseFloat(values[1]), parseFloat(values[2]));
         this.vertices.push(vertex);
     }
 
-    parseNormal(values: string[]): void {
+    private parseNormal(values: string[]): void {
         const normal = new Vector3(parseFloat(values[0]), parseFloat(values[1]), parseFloat(values[2]));
         this.normals.push(normal.getNormalized());
     }
 
-    parseFace(values: string[]): void {
+    private parseFace(values: string[]): void {
         const faceVertexIndices: number[] = [];
         const faceTextureIndices: number[] = [];
         const faceNormalIndices: number[] = [];
@@ -62,7 +63,13 @@ export class ObjLoader implements MeshLoader {
         const white = new Color(255, 255, 255);
         const face = new Triangle(this.vertices[(faceVertexIndices[0] - 1)], this.vertices[(faceVertexIndices[1] - 1)], this.vertices[(faceVertexIndices[2] - 1)],
             this.normals[(faceNormalIndices[0] - 1)], this.normals[(faceNormalIndices[1] - 1)], this.normals[(faceNormalIndices[2] - 1)],
-            white, white, white);
+            Color.GREEN, Color.GREEN, Color.GREEN);
         this.faces.push(face);
+    }
+
+    private reset() {
+        this.vertices = [];
+        this.normals = [];
+        this.faces = [];
     }
 }

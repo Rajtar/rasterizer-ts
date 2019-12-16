@@ -28,25 +28,29 @@ export class Rasterizer {
     }
 
     public update(): void {
-        const objectsToRender = [];
+        const trianglesToRender = [];
         this.camera.setLookAt(KeyboardInputData.cameraPosition, KeyboardInputData.cameraTarget, new Vector3(0, 1, 0));
-        for (const object of this.triangles) {
-            if (object instanceof Triangle) {
-                const triangleObject = object as Triangle;
-                const projectedTriangle = this.camera.project(triangleObject);
-                const enlightenedTriangle = this.lights[0].enlighten(projectedTriangle);      // TODO: support multiple lights
-                objectsToRender.push(enlightenedTriangle);
+        for (const triangle of this.triangles) {
+            const projectedTriangle = this.camera.project(triangle);
+            let enlightenedTriangle = projectedTriangle;
+            for (const light of this.lights) {
+                enlightenedTriangle = light.enlighten(enlightenedTriangle);
             }
+            trianglesToRender.push(enlightenedTriangle);
+
 
             /***************************/
-            object.transform.scale(new Vector3(KeyboardInputData.scaling, KeyboardInputData.scaling, KeyboardInputData.scaling));
+            triangle.transform.scale(new Vector3(KeyboardInputData.scaling, KeyboardInputData.scaling, KeyboardInputData.scaling));
             if (KeyboardInputData.rotationDirection.getMagnitude() != 0) {
-                object.transform.rotate(KeyboardInputData.rotationDirection, KeyboardInputData.rotationAngle);
+                triangle.transform.rotate(KeyboardInputData.rotationDirection, KeyboardInputData.rotationAngle);
             }
             /***************************/
         }
+
+        this.lights[0].position = KeyboardInputData.lightPosition;
+
         this.targetScreen.clearScreen();
-        this.render(objectsToRender);
+        this.render(trianglesToRender);
         this.targetScreen.setFpsDisplay(this.calculateFps());
         window.requestAnimationFrame(this.update.bind(this));
     }

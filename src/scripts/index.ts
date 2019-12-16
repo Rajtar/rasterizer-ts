@@ -9,6 +9,7 @@ import {FileLoader} from "./io/input/file/FileLoader";
 import {ObjLoader} from "./io/input/mesh/ObjLoader";
 import {DirectionalLight} from "./light/DirectionalLight";
 import {Color} from "./camera/Color";
+import {PointLight} from "./light/PointLight";
 
 function initialize(): void {
     const canvas: HTMLCanvasElement = document.getElementById("screenCanvas") as HTMLCanvasElement;
@@ -25,14 +26,16 @@ function initialize(): void {
     const meshLoader = new ObjLoader();
     const objMesh = meshLoader.loadMesh(objText);
 
-    objMesh.transform.scale(new Vector3(1.25, 1.25, 1.25));
+    // objMesh.transform.scale(new Vector3(0.25, 0.25, 0.25));
+    // objMesh.transform.translate(new Vector3(0, 0, -10));
+    // objMesh.transform.translate(new Vector3(-0.5, -0.5, 0));
 
-    const lightPosition = new Vector3(0, 0, 10);
     const ambientLightColor = new Color(0, 0, 0);
-    const diffuseLightColor = new Color(0.25, 0.15, 0);
-    const specularLightColor = new Color(0.15, 0.15, 0.15);
+    const diffuseLightColor = new Color(0.3, 0.3, 0.3);
+    const specularLightColor = new Color(0.2, 0.2, 0.2);
 
-    const light = new DirectionalLight(lightPosition, ambientLightColor, diffuseLightColor, specularLightColor, 1);
+    const light = new PointLight(KeyboardInputData.lightPosition, ambientLightColor, diffuseLightColor, specularLightColor, 20);
+    const light2 = new PointLight( new Vector3(-3, 0, 3), ambientLightColor, diffuseLightColor, new Color(0.2, 0.2, 0.2), 20);
 
     const rasterizer: Rasterizer = new Rasterizer(targetScreen, [objMesh], [light], camera);
     rasterizer.update();
