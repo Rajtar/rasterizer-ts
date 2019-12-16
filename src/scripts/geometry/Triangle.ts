@@ -1,5 +1,5 @@
 import {Vector3} from "../math/Vector3";
-import {Color} from "../camera/Color";
+import {Color} from "../light/Color";
 import {Settings} from "../io/output/screen/Settings";
 import {DrawableObject} from "./DrawableObject";
 import {MathUtils} from "../math/MathUtils";

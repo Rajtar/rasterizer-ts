@@ -1,16 +1,15 @@
 import {Vector3} from "../math/Vector3";
-import {Triangle} from "../geometry/Triangle";
-import {Color} from "../camera/Color";
+import {LightIntensity} from "./LightIntensity";
 
 export abstract class Light {
 
     private _position: Vector3;
-    private readonly _ambient: Color;
-    private readonly _diffuse: Color;
-    private readonly _specular: Color;
+    private readonly _ambient: LightIntensity;
+    private readonly _diffuse: LightIntensity;
+    private readonly _specular: LightIntensity;
     private readonly _shininess: number;
 
-    protected constructor(position: Vector3, ambient: Color, diffuse: Color, specular: Color, shininess: number) {
+    protected constructor(position: Vector3, ambient: LightIntensity, diffuse: LightIntensity, specular: LightIntensity, shininess: number) {
         this._position = position;
         this._ambient = ambient;
         this._diffuse = diffuse;
@@ -18,14 +17,7 @@ export abstract class Light {
         this._shininess = shininess;
     }
 
-    enlighten(triangle: Triangle): Triangle {
-        const newAColor = this.calculateVertexColor(triangle.a, triangle.aColor, triangle.aNormal);
-        const newBColor = this.calculateVertexColor(triangle.b, triangle.bColor, triangle.bNormal);
-        const newCColor = this.calculateVertexColor(triangle.c, triangle.cColor, triangle.cNormal);
-        return triangle.withColors(newAColor, newBColor, newCColor);
-    }
-
-    abstract calculateVertexColor(vertex: Vector3, vertexColor: Color, normal: Vector3): Color;
+    abstract calculateVertexLightIntensity(vertex: Vector3, normal: Vector3): LightIntensity;
 
     get position(): Vector3 {
         return this._position;
@@ -35,15 +27,15 @@ export abstract class Light {
         this._position = value;
     }
 
-    get ambient(): Color {
+    get ambient(): LightIntensity {
         return this._ambient;
     }
 
-    get diffuse(): Color {
+    get diffuse(): LightIntensity {
         return this._diffuse;
     }
 
-    get specular(): Color {
+    get specular(): LightIntensity {
         return this._specular;
     }
 

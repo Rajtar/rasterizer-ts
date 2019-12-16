@@ -1,12 +1,13 @@
 import {ScreenHandler} from "./io/output/screen/ScreenHandler";
 import {Triangle} from "./geometry/Triangle";
 import {ScreenBuffer} from "./io/output/screen/ScreenBuffer";
-import {Color} from "./camera/Color";
+import {Color} from "./light/Color";
 import {Vector3} from "./math/Vector3";
 import {Camera} from "./camera/Camera";
 import {KeyboardInputData} from "./io/input/keyboard/KeyboardInputData";
 import {DrawableObject} from "./geometry/DrawableObject";
 import {Light} from "./light/Light";
+import {LightIntensity} from "./light/LightIntensity";
 
 export class Rasterizer {
 
@@ -32,12 +33,7 @@ export class Rasterizer {
         this.camera.setLookAt(KeyboardInputData.cameraPosition, KeyboardInputData.cameraTarget, new Vector3(0, 1, 0));
         for (const triangle of this.triangles) {
             const projectedTriangle = this.camera.project(triangle);
-            let enlightenedTriangle = projectedTriangle;
-            for (const light of this.lights) {
-                enlightenedTriangle = light.enlighten(enlightenedTriangle);
-            }
-            trianglesToRender.push(enlightenedTriangle);
-
+            trianglesToRender.push(this.enlightenTriangle(projectedTriangle));
 
             /***************************/
             triangle.transform.scale(new Vector3(KeyboardInputData.scaling, KeyboardInputData.scaling, KeyboardInputData.scaling));
@@ -53,6 +49,21 @@ export class Rasterizer {
         this.render(trianglesToRender);
         this.targetScreen.setFpsDisplay(this.calculateFps());
         window.requestAnimationFrame(this.update.bind(this));
+    }
+
+    private enlightenTriangle(triangle: Triangle): Triangle {
+        let aLightIntensity = new LightIntensity();
+        let bLightIntensity = new LightIntensity();
+        let cLightIntensity = new LightIntensity();
+        for (const light of this.lights) {
+            aLightIntensity = aLightIntensity.add(light.calculateVertexLightIntensity(triangle.a, triangle.aNormal));
+            bLightIntensity = bLightIntensity.add(light.calculateVertexLightIntensity(triangle.b, triangle.bNormal));
+            cLightIntensity = cLightIntensity.add(light.calculateVertexLightIntensity(triangle.c, triangle.cNormal));
+        }
+        const newAColor = triangle.aColor.multiply(aLightIntensity);
+        const newBColor = triangle.bColor.multiply(bLightIntensity);
+        const newCColor = triangle.cColor.multiply(cLightIntensity);
+        return triangle.withColors(newAColor, newBColor, newCColor);
     }
 
     private calculateFps(): number {

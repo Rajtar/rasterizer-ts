@@ -1,4 +1,4 @@
-import {Color} from "../../../camera/Color";
+import {Color} from "../../../light/Color";
 import {Settings} from "./Settings";
 
 export class ScreenBuffer {

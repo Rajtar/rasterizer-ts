@@ -1,4 +1,4 @@
-import {Color} from "../../../camera/Color";
+import {Color} from "../../../light/Color";
 
 export class Settings {
     static screenWidth: number;

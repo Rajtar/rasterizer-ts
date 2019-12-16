@@ -1,3 +1,5 @@
+import {LightIntensity} from "./LightIntensity";
+
 export class Color {
 
     private readonly _r: number;
@@ -9,11 +11,15 @@ export class Color {
     public static readonly GREEN = new Color(0, 255, 0);
     public static readonly BLUE = new Color(0, 0, 255);
 
-    constructor(r: number, g: number, b: number, a = 255) {
+    constructor(r = 0, g = 0, b = 0, a = 255) {
         this._r = r;
         this._g = g;
         this._b = b;
         this._a = a;
+    }
+
+    multiply(other: LightIntensity): Color {
+        return new Color(this.r * other.r, this.g * other.g, this.b * other.b);
     }
 
     get r(): number {

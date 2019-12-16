@@ -2,7 +2,7 @@ import {MeshLoader} from "./MeshLoader";
 import {Mesh} from "../../../geometry/Mesh";
 import {Vector3} from "../../../math/Vector3";
 import {Triangle} from "../../../geometry/Triangle";
-import {Color} from "../../../camera/Color";
+import {Color} from "../../../light/Color";
 
 export class ObjLoader implements MeshLoader {
 
@@ -63,7 +63,7 @@ export class ObjLoader implements MeshLoader {
         const white = new Color(255, 255, 255);
         const face = new Triangle(this.vertices[(faceVertexIndices[0] - 1)], this.vertices[(faceVertexIndices[1] - 1)], this.vertices[(faceVertexIndices[2] - 1)],
             this.normals[(faceNormalIndices[0] - 1)], this.normals[(faceNormalIndices[1] - 1)], this.normals[(faceNormalIndices[2] - 1)],
-            Color.GREEN, Color.GREEN, Color.GREEN);
+            white, white, white);
         this.faces.push(face);
     }
 

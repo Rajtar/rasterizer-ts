@@ -9,5 +9,5 @@ export class KeyboardInputData {
     static rotationDirection = new Vector3(0, 0, 0);
     static rotationAngle = 0;
 
-    static lightPosition = new Vector3(3, 0, 3);
+    static lightPosition = new Vector3(3, 0, 1.5);
 }
