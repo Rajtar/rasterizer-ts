@@ -90,6 +90,10 @@ export class Triangle extends DrawableObject {
         return new Triangle(this.a, this.b, this.c, this.aNormal, this.bNormal, this.cNormal, newAColor, newBColor, newCColor);
     }
 
+    withNormals(newANormal: Vector3, newBNormal: Vector3, newCNormal: Vector3): Triangle {
+        return new Triangle(this.a, this.b, this.c, newANormal, newBNormal, newCNormal, this.aColor, this.bColor, this.cColor);
+    }
+
     toTriangles(): Triangle[] {
         return [this];
     }

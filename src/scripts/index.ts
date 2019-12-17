@@ -21,11 +21,11 @@ function initialize(): void {
     camera.setLookAt(KeyboardInputData.cameraPosition, KeyboardInputData.cameraTarget, new Vector3(0, 1, 0));
     camera.setPerspective(45, 16/9, 0.1, 100);
 
-    const objText = FileLoader.loadFile("resources/models/monkey.obj");
+    const objText = FileLoader.loadFile("resources/models/dodecahedron.obj");
     const meshLoader = new ObjLoader();
     const objMesh = meshLoader.loadMesh(objText);
 
-    // objMesh.transform.scale(new Vector3(0.25, 0.25, 0.25));
+    // objMesh.transform.scale(new Vector3(0.05, 0.05, 0.05));
     // objMesh.transform.translate(new Vector3(0, 0, -10));
     // objMesh.transform.translate(new Vector3(-0.5, -0.5, 0));
 
