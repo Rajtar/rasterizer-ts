@@ -9,6 +9,7 @@ import {FileLoader} from "./io/input/file/FileLoader";
 import {ObjLoader} from "./io/input/mesh/ObjLoader";
 import {PointLight} from "./light/PointLight";
 import {LightIntensity} from "./light/LightIntensity";
+import {DirectionalLight} from "./light/DirectionalLight";
 
 function initialize(): void {
     const canvas: HTMLCanvasElement = document.getElementById("screenCanvas") as HTMLCanvasElement;
@@ -21,8 +22,8 @@ function initialize(): void {
     camera.setLookAt(KeyboardInputData.cameraPosition, KeyboardInputData.cameraTarget, new Vector3(0, 1, 0));
     camera.setPerspective(45, 16/9, 0.1, 100);
 
-    const objText = FileLoader.loadFile("resources/models/dodecahedron.obj");
     const meshLoader = new ObjLoader();
+    const objText = FileLoader.loadFile("resources/models/monkey.obj");
     const objMesh = meshLoader.loadMesh(objText);
 
     // objMesh.transform.scale(new Vector3(0.5, 0.5, 0.5));
@@ -31,11 +32,11 @@ function initialize(): void {
 
     const ambientLightColor = new LightIntensity(0, 0, 0);
     const specularLightColor = new LightIntensity(1, 0, 1);
+    const light1 = new DirectionalLight(KeyboardInputData.lightPosition, ambientLightColor, new LightIntensity(1, 0, 0), specularLightColor, 20);
+    const light2 = new DirectionalLight( new Vector3(-3, 0, 1.5), ambientLightColor, new LightIntensity(0, 0, 1), specularLightColor, 20);
+    const light3 = new PointLight( new Vector3(0, 1, 2), ambientLightColor, new LightIntensity(0.05, 0.05, 0.05), new LightIntensity(0.05, 0.05, 0.05), 20);
 
-    const light = new PointLight(KeyboardInputData.lightPosition, ambientLightColor, new LightIntensity(1, 0, 0), specularLightColor, 20);
-    const light2 = new PointLight( new Vector3(-3, 0, 1.5), ambientLightColor, new LightIntensity(0, 0, 1), specularLightColor, 20);
-
-    const rasterizer: Rasterizer = new Rasterizer(targetScreen, [objMesh], [light, light2], camera);
+    const rasterizer: Rasterizer = new Rasterizer(targetScreen, [objMesh], [light1, light2, light3], camera);
     rasterizer.update();
 }
 

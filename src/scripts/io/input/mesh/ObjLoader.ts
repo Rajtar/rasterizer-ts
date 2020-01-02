@@ -61,10 +61,9 @@ export class ObjLoader implements MeshLoader {
                 }
             }
         }
-        const white = new Color(255, 255, 255);
         let face = new Triangle(this.vertices[(faceVertexIndices[0] - 1)], this.vertices[(faceVertexIndices[1] - 1)], this.vertices[(faceVertexIndices[2] - 1)],
             this.normals[(faceNormalIndices[0] - 1)], this.normals[(faceNormalIndices[1] - 1)], this.normals[(faceNormalIndices[2] - 1)],
-            white, white, white);
+            Color.WHITE, Color.WHITE, Color.WHITE);
 
         if(face.aNormal == undefined || face.bNormal == undefined || face.cNormal == undefined) {
             face = NormalsCreator.createNormals(face);

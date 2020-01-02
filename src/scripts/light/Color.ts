@@ -10,6 +10,8 @@ export class Color {
     public static readonly RED = new Color(255, 0, 0);
     public static readonly GREEN = new Color(0, 255, 0);
     public static readonly BLUE = new Color(0, 0, 255);
+    public static readonly BLACK = new Color(0, 0, 0);
+    public static readonly WHITE = new Color(255, 255, 255);
 
     constructor(r = 0, g = 0, b = 0, a = 255) {
         this._r = r;
