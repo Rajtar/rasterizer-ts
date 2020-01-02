@@ -25,12 +25,11 @@ function initialize(): void {
     const meshLoader = new ObjLoader();
     const objMesh = meshLoader.loadMesh(objText);
 
-    // objMesh.transform.scale(new Vector3(0.05, 0.05, 0.05));
+    // objMesh.transform.scale(new Vector3(0.5, 0.5, 0.5));
     // objMesh.transform.translate(new Vector3(0, 0, -10));
     // objMesh.transform.translate(new Vector3(-0.5, -0.5, 0));
 
     const ambientLightColor = new LightIntensity(0, 0, 0);
-    const diffuseLightColor = new LightIntensity(0.3, 0.3, 0.3);
     const specularLightColor = new LightIntensity(1, 0, 1);
 
     const light = new PointLight(KeyboardInputData.lightPosition, ambientLightColor, new LightIntensity(1, 0, 0), specularLightColor, 20);

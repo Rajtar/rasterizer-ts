@@ -73,7 +73,7 @@ export class ObjLoader implements MeshLoader {
         this.faces.push(face);
     }
 
-    private reset() {
+    private reset(): void {
         this.vertices = [];
         this.normals = [];
         this.faces = [];
