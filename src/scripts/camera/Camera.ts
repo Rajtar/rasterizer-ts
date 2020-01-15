@@ -37,9 +37,10 @@ export class Camera {
         const newA = projectionViewWorld.multiply(triangle.a);
         const newB = projectionViewWorld.multiply(triangle.b);
         const newC = projectionViewWorld.multiply(triangle.c);
-        const newANormal = projectionViewWorld.multiply(triangle.aNormal);
-        const newBNormal = projectionViewWorld.multiply(triangle.bNormal);
-        const newCNormal = projectionViewWorld.multiply(triangle.cNormal);
+        const runtimeObjectToWorld = triangle.transform.objectToWorldRuntimeOnly;
+        const newANormal = runtimeObjectToWorld.multiply(triangle.aNormal);
+        const newBNormal = runtimeObjectToWorld.multiply(triangle.bNormal);
+        const newCNormal = runtimeObjectToWorld.multiply(triangle.cNormal);
         return new Triangle(newA, newB, newC, newANormal, newBNormal, newCNormal, triangle.aColor, triangle.bColor, triangle.cColor);
     }
 

@@ -13,7 +13,7 @@ export class PointLight extends Light {
         let V = vertex.multiply(-1);
         const L = this.position.substract(V).getNormalized();
         V = V.getNormalized();
-        const R = L.getReflectedBy(N);
+        const R = L.getReflectedBy(N).getNormalized();
 
         const iD = L.dot(N);
         const iS = Math.pow(R.dot(V), this.shininess);

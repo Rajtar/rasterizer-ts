@@ -4,9 +4,11 @@ import {Vector3} from "../math/Vector3";
 export class Transform {
 
     objectToWorld: Matrix4x4;
+    objectToWorldRuntimeOnly: Matrix4x4;
 
     constructor() {
         this.objectToWorld = Matrix4x4.createIdentity();
+        this.objectToWorldRuntimeOnly = Matrix4x4.createIdentity();
     }
 
     translate(translation: Vector3): void {
@@ -16,6 +18,7 @@ export class Transform {
         translationMatrix.data[2] = new Float32Array([0, 0, 1, translation.z]);
         translationMatrix.data[3] = new Float32Array([0, 0, 0, 1]);
         this.objectToWorld = translationMatrix.multiply(this.objectToWorld);
+        this.objectToWorldRuntimeOnly = translationMatrix.multiply(this.objectToWorldRuntimeOnly);
     }
 
     scale(scaling: Vector3): void {
@@ -25,6 +28,7 @@ export class Transform {
         scalingMatrix.data[2] = new Float32Array([0, 0, scaling.z, 0]);
         scalingMatrix.data[3] = new Float32Array([0, 0, 0, 1]);
         this.objectToWorld = scalingMatrix.multiply(this.objectToWorld);
+        this.objectToWorldRuntimeOnly = scalingMatrix.multiply(this.objectToWorldRuntimeOnly);
     }
 
     rotate(rotationDirection: Vector3, angle: number): void {
@@ -57,5 +61,6 @@ export class Transform {
         rotationMatrix.data[3][3] = 1;
 
         this.objectToWorld = rotationMatrix.multiply(this.objectToWorld);
+        this.objectToWorldRuntimeOnly = rotationMatrix.multiply(this.objectToWorldRuntimeOnly);
     }
 }

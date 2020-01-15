@@ -56,10 +56,10 @@ function initialize(): void {
     camera.setPerspective(45, 16/9, 0.1, 100);
 
     const ambientLightColor = new LightIntensity(0, 0, 0);
-    const specularLightColor = new LightIntensity(1, 0, 1);
-    const light1 = new DirectionalLight(KeyboardInputData.lightPosition, ambientLightColor, new LightIntensity(1, 0, 0), specularLightColor, 20);
-    const light2 = new DirectionalLight( new Vector3(-3, 0, 1.5), ambientLightColor, new LightIntensity(0, 0, 1), specularLightColor, 20);
-    const light3 = new PointLight( new Vector3(0, 1, 2), ambientLightColor, new LightIntensity(0.1, 0, 0.1), new LightIntensity(0.05, 0.05, 0.05), 20);
+    const specularLightColor = new LightIntensity(0.2, 0.2, 0.2);
+    const light1 = new PointLight(KeyboardInputData.lightPosition, ambientLightColor, new LightIntensity(1, 0, 0), specularLightColor, 20);
+    const light2 = new PointLight( new Vector3(-3, 0, 1.5), ambientLightColor, new LightIntensity(0, 0, 1), specularLightColor, 20);
+    const light3 = new DirectionalLight( new Vector3(0, 1, 0), ambientLightColor, new LightIntensity(0.5, 0.5, 0.5), new LightIntensity(0.05, 0.05, 0.05), 20);
 
     const lights = [light1, light2, light3];
     const drawableObjects = constructMeshes();

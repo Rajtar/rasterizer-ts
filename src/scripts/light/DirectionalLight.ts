@@ -16,9 +16,9 @@ export class DirectionalLight extends Light {
         const iD = this.position.dot(N);
         const iS = Math.pow(R.dot(V), this.shininess);
 
-        const rIntensity = (this.ambient.r + (iD / 2 * this.diffuse.r) + (iS * this.specular.r));
-        const gIntensity = (this.ambient.g + (iD / 2 * this.diffuse.g) + (iS * this.specular.g));
-        const bIntensity = (this.ambient.b + (iD / 2 * this.diffuse.b) + (iS * this.specular.b));
+        const rIntensity = (this.ambient.r + (iD * this.diffuse.r) + (iS * this.specular.r));
+        const gIntensity = (this.ambient.g + (iD * this.diffuse.g) + (iS * this.specular.g));
+        const bIntensity = (this.ambient.b + (iD * this.diffuse.b) + (iS * this.specular.b));
 
         return new LightIntensity(rIntensity, gIntensity, bIntensity);
     }
